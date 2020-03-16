@@ -1,5 +1,6 @@
 package com.chilin.org;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -39,6 +40,21 @@ public class MainActivity extends AppCompatActivity {
         TextView textViewCurrentDate = (TextView)findViewById(R.id.textView);
         String currentDate = (String) textViewCurrentDate.getText();
         timeRegister.saveLeavingTime(view.getContext(), currentDate);
+    }
+
+    public void saveComingTime(View view){
+        TextView textViewCurrentDate = (TextView)findViewById(R.id.textView);
+        String currentDate = (String) textViewCurrentDate.getText();
+        timeRegister.saveComingTime(view.getContext(), currentDate);
+    }
+
+    public void deleteDB(View view){
+        timeRegister.deleteDB(view.getContext());
+    }
+
+    public void report(View view){
+        Intent intent = new Intent(this, CheckActivity.class);
+        startActivity(intent);
     }
 
 }

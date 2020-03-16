@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">My time</string>
     <string name="edit_message">Enter a message</string>
-    <string name="button_send">Leaving</string>
+    <string name="button_leaving">Leaving</string>
     <string name="button_comming">Coming</string>
+    <string name="button_delete">Delete DB</string>
+    <string name="button_report">Report</string>
 </resources>
