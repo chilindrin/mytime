@@ -19,13 +19,13 @@ public class CheckActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TableLayout tableLayout = createTable();
-        setContentView(tableLayout);
+        TableLayout report = createReport();
+        setContentView(report);
     }
 
-    private TableLayout createTable() {
-        TimeRegister timeRegister = new TimeRegister();
+    private TableLayout createReport() {
         TableLayout tableLayout = new TableLayout(this);
+        TimeRegister timeRegister = new TimeRegister();
         List<String[]> dbResults = timeRegister.getAllDataInDB(tableLayout.getContext());
         for (String[] dbResult:dbResults) {
             TableRow tableRow = createRow(dbResult);
