@@ -24,20 +24,20 @@ public class CheckActivity extends AppCompatActivity {
     }
 
     private TableLayout createReport() {
-        TableLayout tableLayout = new TableLayout(this);
+        TableLayout report = new TableLayout(this);
         TimeRegister timeRegister = new TimeRegister();
-        List<String[]> dbResults = timeRegister.getAllDataInDB(tableLayout.getContext());
-        for (String[] dbResult:dbResults) {
-            TableRow tableRow = createRow(dbResult);
-            tableLayout.addView(tableRow);
+        List<String[]> dailyResults = timeRegister.getAllDataInDB(report.getContext());
+        for (String[] dailyReport:dailyResults) {
+            TableRow dailyInformation = createRow(dailyReport);
+            report.addView(dailyInformation);
         }
-        return tableLayout;
+        return report;
     }
 
     private TableRow createRow(String[] dbResult) {
-        TextView dateText = createTextCell(dbResult[0]);
-        TextView comingText = createTextCell(dbResult[1]);
-        TextView leavingText = createTextCell(dbResult[2]);
+        TextView workingDay = createTextCell(dbResult[0]);
+        TextView comingTime = createTextCell(dbResult[1]);
+        TextView leavingTime = createTextCell(dbResult[2]);
         TextView separatorText1 = createTextCell("||");
         TextView separatorText2 = createTextCell("||");
         TextView separatorText3 = createTextCell("||");
@@ -45,11 +45,11 @@ public class CheckActivity extends AppCompatActivity {
 
         TableRow tableRow = new TableRow(this);
         tableRow.addView(separatorText1);
-        tableRow.addView(dateText);
+        tableRow.addView(workingDay);
         tableRow.addView(separatorText2);
-        tableRow.addView(comingText);
+        tableRow.addView(comingTime);
         tableRow.addView(separatorText3);
-        tableRow.addView(leavingText);
+        tableRow.addView(leavingTime);
         tableRow.addView(separatorText4);
         return tableRow;
     }
