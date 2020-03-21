@@ -2,12 +2,16 @@ package com.chilin.org;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.chilin.org.db.TimeRegister;
+import com.chilin.org.view.AdviceUser;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -23,11 +27,35 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.timeRegister = new TimeRegister();
         setCurrentDateOnDisplay();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.cleanData:
+                adviceUserAndCleanDataIfDesired();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void adviceUserAndCleanDataIfDesired() {
+        new AdviceUser().showAdvice(findViewById(R.id.toolbar).getContext(),this.timeRegister);
     }
 
     private void setCurrentDateOnDisplay() {
         TextView textViewCurrentDate = (TextView)findViewById(R.id.textView);
         textViewCurrentDate.setText(getCurrentDate());
+
     }
 
     private String getCurrentDate(){
@@ -46,10 +74,6 @@ public class MainActivity extends AppCompatActivity {
         TextView textViewCurrentDate = (TextView)findViewById(R.id.textView);
         String currentDate = (String) textViewCurrentDate.getText();
         timeRegister.saveComingTime(view.getContext(), currentDate);
-    }
-
-    public void deleteDB(View view){
-        timeRegister.deleteDB(view.getContext());
     }
 
     public void report(View view){
