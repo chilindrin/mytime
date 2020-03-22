@@ -1,26 +1,29 @@
 package com.chilin.org;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.chilin.org.db.TimeRegister;
+import com.chilin.org.util.DateProvider;
 import com.chilin.org.view.AdviceUser;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class MainActivity extends AppCompatActivity {
 
     private TimeRegister timeRegister;
+    private LocalDateTime currentDate;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,28 +55,33 @@ public class MainActivity extends AppCompatActivity {
         new AdviceUser().showAdvice(findViewById(R.id.toolbar).getContext(),this.timeRegister);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void setCurrentDateOnDisplay() {
-        TextView textViewCurrentDate = (TextView)findViewById(R.id.textView);
-        textViewCurrentDate.setText(getCurrentDate());
-
+        this.currentDate = DateProvider.getCurrentDate();
+        TextView currentDateTextView = findViewById(R.id.currentDateTextView);
+        currentDateTextView.setText(DateProvider.getFriendlyFormatCurrentDate(this.currentDate));
     }
 
-    private String getCurrentDate(){
-        Date currentTime = Calendar.getInstance().getTime();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        return formatter.format(currentTime);
-    }
-
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void saveLeavingTime(View view) {
-        TextView textViewCurrentDate = (TextView)findViewById(R.id.textView);
-        String currentDate = (String) textViewCurrentDate.getText();
-        timeRegister.saveLeavingTime(view.getContext(), currentDate);
+        if (DateProvider.isWeekend(this.currentDate)){
+            new AdviceUser().showSorryWeekend(view.getContext());
+        } else {
+            TextView textViewCurrentDate = findViewById(R.id.currentDateTextView);
+            String currentDate = (String) textViewCurrentDate.getText();
+            timeRegister.saveLeavingTime(view.getContext(), currentDate);
+        }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void saveComingTime(View view){
-        TextView textViewCurrentDate = (TextView)findViewById(R.id.textView);
-        String currentDate = (String) textViewCurrentDate.getText();
-        timeRegister.saveComingTime(view.getContext(), currentDate);
+        if (DateProvider.isWeekend(this.currentDate)){
+            new AdviceUser().showSorryWeekend(view.getContext());
+        } else {
+            TextView textViewCurrentDate = findViewById(R.id.currentDateTextView);
+            String currentDate = (String) textViewCurrentDate.getText();
+            timeRegister.saveComingTime(view.getContext(), currentDate);
+        }
     }
 
     public void report(View view){
