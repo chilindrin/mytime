@@ -30,8 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.timeRegister = new TimeRegister();
         setCurrentDateOnDisplay();
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
     }
 
     @Override
@@ -43,16 +42,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            case R.id.cleanData:
-                adviceUserAndCleanDataIfDesired();
+            case R.id.secureData:
+                secureData();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void adviceUserAndCleanDataIfDesired() {
-        new AdviceUser().showAdvice(findViewById(R.id.toolbar).getContext(),this.timeRegister);
+    private void secureData() {
+        Intent intent = new Intent(this, DriveActivity.class);
+        intent.putExtra("test", "test");
+        startActivity(intent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

@@ -18,7 +18,9 @@ public class AdviceUser {
         public void onClick(DialogInterface dialog, int which) {
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
-                    timeRegister.deleteDB(context);
+
+
+                    //timeRegister.deleteDB(context);
                     break;
 
                 case DialogInterface.BUTTON_NEGATIVE:

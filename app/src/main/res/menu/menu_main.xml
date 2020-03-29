@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/cleanData"
+        android:id="@+id/secureData"
         app:showAsAction="ifRoom"
-        android:title="Clean data">
+        android:title="Secure data">
     </item>
 
 </menu>
