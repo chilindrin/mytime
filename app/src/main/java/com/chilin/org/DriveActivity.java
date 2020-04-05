@@ -10,8 +10,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.chilin.org.db.TimeRegister;
-import com.chilin.org.drive.FolderCreator;
+import com.chilin.org.drive.BackupCreator;
 import com.chilin.org.view.AdviceUser;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -20,13 +19,13 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class DriveActivity extends AppCompatActivity {
 
-    private static final String TAG = "drive-quickstart";
+    private static final String TAG = "drive-activity";
     private static final int SIGNIN_GOOGLEDRIVE_AND_CREATE_DRIVESERVICE = 0;
     private static final int EXPIRED_SESSION = 1;
+    private static final int SIGNIN_AGAIN_RETRY_OPERATION = 2;
 
     private Drive service = null;
     private GoogleAccountCredential credential = null;
@@ -63,8 +62,19 @@ public class DriveActivity extends AppCompatActivity {
                 break;
             case EXPIRED_SESSION:
                 Log.i(TAG, "No more token, a new one has to be requested");
-                startActivityForResult(credential.newChooseAccountIntent(), SIGNIN_GOOGLEDRIVE_AND_CREATE_DRIVESERVICE);
+                startActivityForResult(credential.newChooseAccountIntent(), SIGNIN_AGAIN_RETRY_OPERATION);
                 break;
+            case SIGNIN_AGAIN_RETRY_OPERATION:
+                singInGoogleDriveAndCreateService(resultCode, data);
+                decideWhichActionToRetry(data.getAction());
+                break;
+        }
+    }
+
+    private void decideWhichActionToRetry(String action){
+        switch (action){
+            case "createBackup":
+                createBackup(this.findViewById(R.id.button3));
         }
     }
 
@@ -94,10 +104,7 @@ public class DriveActivity extends AppCompatActivity {
     }
 
     private void createBackupInGoogleDrive() {
-        new FolderCreator(this.service,this).start();
-        TimeRegister timeRegister = new TimeRegister();
-        List<String[]> allDataInDB = timeRegister.getAllDataInDB(getBaseContext());
-
+        new BackupCreator(this.service,this).start();
     }
 
 }
