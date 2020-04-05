@@ -4,26 +4,28 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import com.chilin.org.db.TimeRegister;
+import com.chilin.org.drive.FolderCreator;
+import com.chilin.org.view.AdviceUser;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
-import com.google.api.services.drive.model.File;
-import com.google.api.services.drive.model.FileList;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 public class DriveActivity extends AppCompatActivity {
 
     private static final String TAG = "drive-quickstart";
-    private static final int REQUEST_CODE_SIGN_IN = 0;
+    private static final int SIGNIN_GOOGLEDRIVE_AND_CREATE_DRIVESERVICE = 0;
     private static final int EXPIRED_SESSION = 1;
 
     private Drive service = null;
@@ -33,47 +35,7 @@ public class DriveActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drive);
-    }
-
-    @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQUEST_CODE_SIGN_IN:
-                Log.i(TAG, "Sign in request code");
-                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
-                    Log.i(TAG, "Signed in successfully.");
-                    String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                    if (accountName != null) {
-                        credential.setSelectedAccountName(accountName);
-                        service = getDriveService(credential);
-                        callApi();
-                    }
-                }
-                break;
-            case EXPIRED_SESSION:
-                Log.i(TAG, "No more token, a new one has to be requested");
-                startActivityForResult(credential.newChooseAccountIntent(), REQUEST_CODE_SIGN_IN);
-                break;
-        }
-    }
-
-    private void callApi() {
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Drive.Files files = service.files();
-                try {
-                    FileList execute = files.list().execute();
-                    List<File> files1 = execute.getFiles();
-                } catch (UserRecoverableAuthIOException e) {
-                    startActivityForResult(e.getIntent(), EXPIRED_SESSION);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        t.start();
+        setUpButtonInToolbar();
     }
 
     @Override
@@ -81,7 +43,40 @@ public class DriveActivity extends AppCompatActivity {
         super.onStart();
         if (service == null) {
             credential = GoogleAccountCredential.usingOAuth2(this, Arrays.asList(DriveScopes.DRIVE));
-            startActivityForResult(credential.newChooseAccountIntent(), REQUEST_CODE_SIGN_IN);
+            startActivityForResult(credential.newChooseAccountIntent(), SIGNIN_GOOGLEDRIVE_AND_CREATE_DRIVESERVICE);
+        }
+    }
+
+    private void setUpButtonInToolbar() {
+        Toolbar myChildToolbar = findViewById(R.id.toolbarDrive);
+        setSupportActionBar(myChildToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case SIGNIN_GOOGLEDRIVE_AND_CREATE_DRIVESERVICE:
+                singInGoogleDriveAndCreateService(resultCode, data);
+                break;
+            case EXPIRED_SESSION:
+                Log.i(TAG, "No more token, a new one has to be requested");
+                startActivityForResult(credential.newChooseAccountIntent(), SIGNIN_GOOGLEDRIVE_AND_CREATE_DRIVESERVICE);
+                break;
+        }
+    }
+
+    private void singInGoogleDriveAndCreateService(int resultCode, Intent data) {
+        Log.i(TAG, "Sign in request code");
+        if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
+            Log.i(TAG, "Signed in successfully.");
+            String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+            if (accountName != null) {
+                credential.setSelectedAccountName(accountName);
+                service = getDriveService(credential);
+            }
         }
     }
 
@@ -89,6 +84,20 @@ public class DriveActivity extends AppCompatActivity {
         return new Drive.Builder(AndroidHttp.newCompatibleTransport(), new GsonFactory(), credential)
                 .setApplicationName("My Time")
                 .build();
+    }
+
+    public void createBackup(View view){
+        if (this.service == null){
+            new AdviceUser().showSorryBackupNotPossible(view.getContext());
+        }
+        createBackupInGoogleDrive();
+    }
+
+    private void createBackupInGoogleDrive() {
+        new FolderCreator(this.service,this).start();
+        TimeRegister timeRegister = new TimeRegister();
+        List<String[]> allDataInDB = timeRegister.getAllDataInDB(getBaseContext());
+
     }
 
 }
