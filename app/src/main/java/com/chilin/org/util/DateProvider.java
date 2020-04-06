@@ -63,7 +63,7 @@ public class DateProvider {
             stringBuilder.append(',');
             stringBuilder.append(content[2]);
             if (i != dbContent.size() - 1){
-                stringBuilder.append('|');
+                stringBuilder.append(System.getProperty("line.separator"));
             }
         }
         return stringBuilder.toString();
