@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/secureData"
+        android:id="@+id/createBackup"
         app:showAsAction="ifRoom"
         android:title="Secure data">
     </item>

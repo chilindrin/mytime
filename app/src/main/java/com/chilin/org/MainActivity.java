@@ -12,7 +12,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.chilin.org.backup.BackupCreatorActivity;
 import com.chilin.org.db.TimeRegister;
+import com.chilin.org.report.ReportCreatorActivity;
 import com.chilin.org.util.DateProvider;
 import com.chilin.org.view.AdviceUser;
 
@@ -42,17 +44,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            case R.id.secureData:
-                secureData();
+            case R.id.createBackup:
+                showCreateBackupActivity();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void secureData() {
-        Intent intent = new Intent(this, DriveActivity.class);
-        intent.putExtra("test", "test");
+    private void showCreateBackupActivity() {
+        Intent intent = new Intent(this, BackupCreatorActivity.class);
         startActivity(intent);
     }
 
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void report(View view){
-        Intent intent = new Intent(this, CheckActivity.class);
+        Intent intent = new Intent(this, ReportCreatorActivity.class);
         startActivity(intent);
     }
 

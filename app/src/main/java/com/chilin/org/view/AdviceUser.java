@@ -29,9 +29,4 @@ public class AdviceUser {
         builder.setMessage("Sorry! Das Backup konnte nicht erstellt werden").setPositiveButton("Ok", dialogSorryWeekend).show();
     }
 
-    public void showBackupWurdeErstellt(Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("Ein Backup wurde erstellt! Schau mal dein Drive Konto").setPositiveButton("Ok", dialogSorryWeekend).show();
-    }
-
 }

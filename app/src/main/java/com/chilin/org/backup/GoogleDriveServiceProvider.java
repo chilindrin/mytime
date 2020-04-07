@@ -1,4 +1,4 @@
-package com.chilin.org.drive;
+package com.chilin.org.backup;
 
 import android.accounts.AccountManager;
 import android.content.Context;
@@ -12,18 +12,26 @@ import com.google.api.services.drive.DriveScopes;
 
 import java.util.Arrays;
 
-public class DriveServiceProvider {
+public class GoogleDriveServiceProvider {
 
     private Drive service = null;
     private GoogleAccountCredential credential = null;
     private Context context;
 
-    public DriveServiceProvider(Context context){
+    public GoogleDriveServiceProvider(Context context){
         this.context = context;
     }
 
     public void createCredential() {
         credential = GoogleAccountCredential.usingOAuth2(this.context, Arrays.asList(DriveScopes.DRIVE));
+    }
+
+    public Drive getService(){
+        return this.service;
+    }
+
+    public Context getContext(){
+        return this.context;
     }
 
     public GoogleAccountCredential getCredential(){
@@ -42,11 +50,4 @@ public class DriveServiceProvider {
         }
     }
 
-    public Drive getService(){
-        return this.service;
-    }
-
-    public Context getContext(){
-        return this.context;
-    }
 }

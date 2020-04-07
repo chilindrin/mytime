@@ -1,4 +1,4 @@
-package com.chilin.org;
+package com.chilin.org.backup;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,14 +9,12 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.chilin.org.drive.BackupCreator;
-import com.chilin.org.drive.DriveServiceProvider;
+import com.chilin.org.R;
 import com.chilin.org.view.AdviceUser;
 
-public class DriveActivity extends AppCompatActivity {
+public class BackupCreatorActivity extends AppCompatActivity {
 
-    private BackupCreator backupCreatorThread;
-    private DriveServiceProvider serviceProvider;
+    private GoogleDriveServiceProvider serviceProvider;
     private static final String TAG = "drive-activity";
     private static final int SIGNIN_GOOGLEDRIVE_AND_CREATE_DRIVESERVICE = 0;
 
@@ -31,7 +29,7 @@ public class DriveActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if( this.serviceProvider == null){
-            this.serviceProvider = new DriveServiceProvider(this);
+            this.serviceProvider = new GoogleDriveServiceProvider(this);
         }
         if (this.serviceProvider.getService() == null) {
             this.serviceProvider.createCredential();
@@ -40,8 +38,8 @@ public class DriveActivity extends AppCompatActivity {
     }
 
     private void setUpButtonInToolbar() {
-        Toolbar myChildToolbar = findViewById(R.id.toolbarDrive);
-        setSupportActionBar(myChildToolbar);
+        Toolbar driveActivityToolbar = findViewById(R.id.driveActivityToolbar);
+        setSupportActionBar(driveActivityToolbar);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
     }
@@ -68,8 +66,9 @@ public class DriveActivity extends AppCompatActivity {
         if (this.serviceProvider.getService() == null){
             new AdviceUser().showSorryBackupNotPossible(view.getContext());
         }
-        backupCreatorThread = new BackupCreator(this.serviceProvider);
+        BackupCreatorThread backupCreatorThread = new BackupCreatorThread(this.serviceProvider);
         backupCreatorThread.start();
+        finish();
     }
 
 }
