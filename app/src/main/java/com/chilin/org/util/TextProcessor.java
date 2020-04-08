@@ -1,9 +1,6 @@
 package com.chilin.org.util;
 
-import android.content.Context;
 import android.util.Log;
-
-import com.chilin.org.db.TimeRegister;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -14,9 +11,7 @@ public class TextProcessor {
 
     private static final String TAG = "text-processor";
 
-    public static String convertDBContentToString(Context context){
-        TimeRegister timeRegister = new TimeRegister();
-        List<String[]> allDataInDB = timeRegister.getAllDataInDB(context);
+    public static String convertDBContentToString(List<String[]> allDataInDB){
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0;i<allDataInDB.size();i++) {
             String[] content = allDataInDB.get(i);
@@ -25,6 +20,10 @@ public class TextProcessor {
             stringBuilder.append(content[1]);
             stringBuilder.append(',');
             stringBuilder.append(content[2]);
+            stringBuilder.append(',');
+            stringBuilder.append(content[3]);
+            stringBuilder.append(',');
+            stringBuilder.append(content[4]);
             if (i != allDataInDB.size() - 1){
                 stringBuilder.append(System.getProperty("line.separator"));
             }

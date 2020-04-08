@@ -9,6 +9,8 @@ public final class TimeDBSchema {
         public static final String TABLE_NAME = "entry";
         public static final String COLUMN_NAME_DATE = "date";
         public static final String COLUMN_NAME_COMMING = "comming";
+        public static final String COLUMN_NAME_BEGINN_PAUSE = "beginnpause";
+        public static final String COLUMN_NAME_ENDE_PAUSE = "endepause";
         public static final String COLUMN_NAME_LEAVING = "leaving";
     }
 
@@ -17,9 +19,14 @@ public final class TimeDBSchema {
                     DayEntry._ID + " INTEGER PRIMARY KEY," +
                     DayEntry.COLUMN_NAME_DATE + " TEXT," +
                     DayEntry.COLUMN_NAME_COMMING + " TEXT," +
+                    DayEntry.COLUMN_NAME_BEGINN_PAUSE + " TEXT," +
+                    DayEntry.COLUMN_NAME_ENDE_PAUSE + " TEXT," +
                     DayEntry.COLUMN_NAME_LEAVING + " TEXT)";
 
-    public static final String SQL_DELETE_ENTRIES =
-            "DROP TABLE IF EXISTS " + DayEntry.TABLE_NAME;
+    public static final String SQL_ADD_COLUMN_BEGINN_PAUSE =
+            "ALTER TABLE "+DayEntry.TABLE_NAME+" ADD COLUMN "+DayEntry.COLUMN_NAME_BEGINN_PAUSE+" TEXT";
+
+    public static final String SQL_ADD_COLUMN_ENDE_PAUSE =
+            "ALTER TABLE "+DayEntry.TABLE_NAME+" ADD COLUMN "+DayEntry.COLUMN_NAME_ENDE_PAUSE+" TEXT";
 
 }

@@ -20,10 +20,10 @@ public class TimeDBDealer extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
-        sqLiteDatabase.execSQL(TimeDBSchema.SQL_DELETE_ENTRIES);
-        onCreate(sqLiteDatabase);
+        sqLiteDatabase.execSQL(TimeDBSchema.SQL_ADD_COLUMN_BEGINN_PAUSE);
+        sqLiteDatabase.execSQL(TimeDBSchema.SQL_ADD_COLUMN_ENDE_PAUSE);
     }
 }

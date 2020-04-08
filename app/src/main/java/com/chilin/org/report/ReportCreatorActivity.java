@@ -38,9 +38,12 @@ public class ReportCreatorActivity extends AppCompatActivity {
     }
 
     private void addInfoToReport() {
+        String[] tableHeader = {"Datum","Kommen","Gehen","P.Start","P.Ende"};
+        TableRow tableHeaderView = createRow(tableHeader);
         TableLayout report = findViewById(R.id.reportTable);
-        TimeRegister timeRegister = new TimeRegister();
-        List<String[]> dailyResults = timeRegister.getAllDataInDB(report.getContext());
+        report.addView(tableHeaderView);
+        TimeRegister timeRegister = new TimeRegister(this);
+        List<String[]> dailyResults = timeRegister.getAllDataInDB();
         for (String[] dailyReport:dailyResults) {
             TableRow dailyInformation = createRow(dailyReport);
             report.addView(dailyInformation);
@@ -52,10 +55,15 @@ public class ReportCreatorActivity extends AppCompatActivity {
         TextView workingDay = createTextCell(dailyReport[0]);
         TextView comingTime = createTextCell(dailyReport[1]);
         TextView leavingTime = createTextCell(dailyReport[2]);
+        TextView beginnPauseTime = createTextCell(dailyReport[3]);
+        TextView endePauseTime = createTextCell(dailyReport[4]);
+
         TextView separatorText1 = createTextCell("||");
         TextView separatorText2 = createTextCell("||");
         TextView separatorText3 = createTextCell("||");
         TextView separatorText4 = createTextCell("||");
+        TextView separatorText5 = createTextCell("||");
+        TextView separatorText6 = createTextCell("||");
 
         TableRow tableRow = new TableRow(this);
         tableRow.addView(separatorText1);
@@ -65,13 +73,18 @@ public class ReportCreatorActivity extends AppCompatActivity {
         tableRow.addView(separatorText3);
         tableRow.addView(leavingTime);
         tableRow.addView(separatorText4);
+        tableRow.addView(beginnPauseTime);
+        tableRow.addView(separatorText5);
+        tableRow.addView(endePauseTime);
+        tableRow.addView(separatorText6);
+
         Log.i(TAG, "createRow executed successfully.");
         return tableRow;
     }
 
     private TextView createTextCell(String text){
         if (StringUtils.isBlank(text)){
-            text = "<not yet inserted>";
+            text = "<->";
         }
         TextView textCell = new TextView(this);
         textCell.setText(text);

@@ -2,6 +2,7 @@ package com.chilin.org.backup;
 
 import android.util.Log;
 
+import com.chilin.org.db.DBReader;
 import com.chilin.org.util.TextProcessor;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.http.ByteArrayContent;
@@ -88,7 +89,8 @@ public class BackupCreatorThread extends Thread {
     }
 
     private void writeDBContentInFile(String backupFileId) {
-        String dbContentAsString = TextProcessor.convertDBContentToString(this.serviceProvider.getContext());
+        DBReader dbReader = new DBReader(this.serviceProvider.getContext());
+        String dbContentAsString = TextProcessor.convertDBContentToString(dbReader.getAllDataInDB());
         ByteArrayContent content = new ByteArrayContent(null,dbContentAsString.getBytes(Charset.forName("UTF-8")));
         try {
             this.serviceProvider.getService().files().update(backupFileId,null,content).execute();
