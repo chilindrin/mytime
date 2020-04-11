@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">My time</string>
-    <string name="button_leaving">Gehen</string>
-    <string name="button_comming">Kommen</string>
-    <string name="button_pause_start">Beginn Pause</string>
-    <string name="button_pause_ende">Ende Pause</string>
-    <string name="button_report">Report</string>
+    <string name="button_leaving">Es reicht! Bis morgen</string>
+    <string name="button_comming">Es geht los</string>
+    <string name="button_pause_start">Chill mal</string>
+    <string name="button_pause_ende">So, weiter machen</string>
+    <string name="button_report">Wie sieht es aus?</string>
 </resources>

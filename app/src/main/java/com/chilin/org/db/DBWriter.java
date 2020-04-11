@@ -58,7 +58,7 @@ public class DBWriter {
                 values,whereColumns,whereValues);
     }
 
-    public void createComingTime(String currentDate) {
+    public void  createComingTime(String currentDate) {
         Date currentTime = Calendar.getInstance().getTime();
         ContentValues values = new ContentValues();
         values.put(TimeDBSchema.DayEntry.COLUMN_NAME_DATE, currentDate);

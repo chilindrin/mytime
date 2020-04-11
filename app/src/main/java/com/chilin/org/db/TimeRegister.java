@@ -4,6 +4,9 @@ import android.content.Context;
 
 import java.util.List;
 
+import lombok.Setter;
+
+@Setter
 public class TimeRegister {
 
     private DBReader dbReader;

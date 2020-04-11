@@ -1,6 +1,9 @@
 package com.chilin.org.backup;
 
+import android.os.Build;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import com.chilin.org.db.DBReader;
 import com.chilin.org.util.TextProcessor;
@@ -25,6 +28,7 @@ public class BackupCreatorThread extends Thread {
         this.serviceProvider = serviceProvider;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void run(){
         String appFolderId = createApplicationFolderIfNecessary();
         String backupFileId = createFileForBackup(appFolderId);
@@ -88,6 +92,7 @@ public class BackupCreatorThread extends Thread {
         return backupFileId;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void writeDBContentInFile(String backupFileId) {
         DBReader dbReader = new DBReader(this.serviceProvider.getContext());
         String dbContentAsString = TextProcessor.convertDBContentToString(dbReader.getAllDataInDB());

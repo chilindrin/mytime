@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setCurrentDateOnDisplay() {
         this.currentDate = DateProvider.getCurrentDate();
+
         TextView currentDateTextView = findViewById(R.id.currentDateTextView);
         currentDateTextView.setText(DateProvider.getFriendlyFormatCurrentDate(this.currentDate));
     }

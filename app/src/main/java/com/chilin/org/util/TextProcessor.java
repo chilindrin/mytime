@@ -1,6 +1,11 @@
 package com.chilin.org.util;
 
+import android.os.Build;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -10,20 +15,42 @@ import java.util.UUID;
 public class TextProcessor {
 
     private static final String TAG = "text-processor";
+    private static final String EMPTY_RESULT = "<->";
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public static String convertDBContentToString(List<String[]> allDataInDB){
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0;i<allDataInDB.size();i++) {
             String[] content = allDataInDB.get(i);
-            stringBuilder.append(content[0]);
+
+            stringBuilder.append(StringUtils.isBlank(
+                    content[DayTableOrder.CURRENT_DAY_POSITION])
+                    ? EMPTY_RESULT : content[DayTableOrder.CURRENT_DAY_POSITION]);
             stringBuilder.append(',');
-            stringBuilder.append(content[1]);
+            stringBuilder.append(StringUtils.isBlank(
+                    content[DayTableOrder.COMMING_POSITION])
+                    ? EMPTY_RESULT : content[DayTableOrder.COMMING_POSITION]);
             stringBuilder.append(',');
-            stringBuilder.append(content[2]);
+            stringBuilder.append(StringUtils.isBlank(
+                    content[DayTableOrder.LEAVING_POSITION])
+                    ? EMPTY_RESULT : content[DayTableOrder.LEAVING_POSITION]);
             stringBuilder.append(',');
-            stringBuilder.append(content[3]);
+            stringBuilder.append(StringUtils.isBlank(
+                    content[DayTableOrder.BEGINN_PAUSE_POSITION])
+                    ? EMPTY_RESULT : content[DayTableOrder.BEGINN_PAUSE_POSITION]);
             stringBuilder.append(',');
-            stringBuilder.append(content[4]);
+            stringBuilder.append(StringUtils.isBlank(
+                    content[DayTableOrder.ENDE_PAUSE_POSITION])
+                    ? EMPTY_RESULT : content[DayTableOrder.ENDE_PAUSE_POSITION]);
+            stringBuilder.append(',');
+
+            String pause = DateProvider.createPause(
+                    content[DayTableOrder.CURRENT_DAY_POSITION],
+                    content[DayTableOrder.BEGINN_PAUSE_POSITION],
+                    content[DayTableOrder.ENDE_PAUSE_POSITION]);
+
+            stringBuilder.append(pause);
+            stringBuilder.append(" min");
             if (i != allDataInDB.size() - 1){
                 stringBuilder.append(System.getProperty("line.separator"));
             }

@@ -1,5 +1,6 @@
 package com.chilin.org.report;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -7,12 +8,15 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.chilin.org.R;
 import com.chilin.org.db.TimeRegister;
+import com.chilin.org.util.DateProvider;
+import com.chilin.org.util.DayTableOrder;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -22,6 +26,7 @@ public class ReportCreatorActivity extends AppCompatActivity {
 
     private static final String TAG = "report-activity";
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,11 +42,11 @@ public class ReportCreatorActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void addInfoToReport() {
-        String[] tableHeader = {"Datum","Kommen","Gehen","P.Start","P.Ende"};
-        TableRow tableHeaderView = createRow(tableHeader);
         TableLayout report = findViewById(R.id.reportTable);
-        report.addView(tableHeaderView);
+        report.addView(createReportHeader());
+
         TimeRegister timeRegister = new TimeRegister(this);
         List<String[]> dailyResults = timeRegister.getAllDataInDB();
         for (String[] dailyReport:dailyResults) {
@@ -51,19 +56,49 @@ public class ReportCreatorActivity extends AppCompatActivity {
         Log.i(TAG, "createReport executed successfully.");
     }
 
-    private TableRow createRow(String[] dailyReport) {
-        TextView workingDay = createTextCell(dailyReport[0]);
-        TextView comingTime = createTextCell(dailyReport[1]);
-        TextView leavingTime = createTextCell(dailyReport[2]);
-        TextView beginnPauseTime = createTextCell(dailyReport[3]);
-        TextView endePauseTime = createTextCell(dailyReport[4]);
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private TableRow createReportHeader(){
+        TextView datumHeader = createTextCell("Datum");
+        TextView kommenHeader = createTextCell("Kommen");
+        TextView gehenHeader = createTextCell("Gehen");
+        TextView pauseHeader =createTextCell("Pause");
 
         TextView separatorText1 = createTextCell("||");
         TextView separatorText2 = createTextCell("||");
         TextView separatorText3 = createTextCell("||");
         TextView separatorText4 = createTextCell("||");
         TextView separatorText5 = createTextCell("||");
-        TextView separatorText6 = createTextCell("||");
+
+        TableRow tableHeader = new TableRow(this);
+        tableHeader.addView(separatorText1);
+        tableHeader.addView(datumHeader);
+        tableHeader.addView(separatorText2);
+        tableHeader.addView(kommenHeader);
+        tableHeader.addView(separatorText3);
+        tableHeader.addView(gehenHeader);
+        tableHeader.addView(separatorText4);
+        tableHeader.addView(pauseHeader);
+        tableHeader.addView(separatorText5);
+
+        Log.i(TAG, "createRow executed successfully.");
+        return tableHeader;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private TableRow createRow(String[] dailyReport) {
+        TextView workingDay = createTextCell(dailyReport[DayTableOrder.CURRENT_DAY_POSITION]);
+        TextView comingTime = createTextCell(dailyReport[DayTableOrder.COMMING_POSITION]);
+        TextView leavingTime = createTextCell(dailyReport[DayTableOrder.LEAVING_POSITION]);
+        TextView pauseView = createTextCell(DateProvider.createPause(
+                dailyReport[DayTableOrder.CURRENT_DAY_POSITION],
+                dailyReport[DayTableOrder.BEGINN_PAUSE_POSITION],
+                dailyReport[DayTableOrder.ENDE_PAUSE_POSITION]));
+
+        TextView separatorText1 = createTextCell("||");
+        TextView separatorText2 = createTextCell("||");
+        TextView separatorText3 = createTextCell("||");
+        TextView separatorText4 = createTextCell("||");
+        TextView separatorText5 = createTextCell("||");
 
         TableRow tableRow = new TableRow(this);
         tableRow.addView(separatorText1);
@@ -73,10 +108,8 @@ public class ReportCreatorActivity extends AppCompatActivity {
         tableRow.addView(separatorText3);
         tableRow.addView(leavingTime);
         tableRow.addView(separatorText4);
-        tableRow.addView(beginnPauseTime);
+        tableRow.addView(pauseView);
         tableRow.addView(separatorText5);
-        tableRow.addView(endePauseTime);
-        tableRow.addView(separatorText6);
 
         Log.i(TAG, "createRow executed successfully.");
         return tableRow;

@@ -4,7 +4,10 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
@@ -32,6 +35,40 @@ public class DateProvider {
             default:
                 return false;
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static String createPause(String currentDay, String beginnPause, String endePause){
+        if (StringUtils.isBlank(currentDay) || StringUtils.isBlank(beginnPause) || StringUtils.isBlank(endePause)){
+            return "<->";
+        }
+        long pauseInMinutes = getPauseInMinutes(currentDay, beginnPause, endePause);
+
+        if (pauseInMinutes <= 8){
+            return "0";
+        } else if (pauseInMinutes > 8 && pauseInMinutes <= 20){
+            return "15";
+        } else if (pauseInMinutes > 20 && pauseInMinutes <= 38){
+            return "30";
+        } else if (pauseInMinutes > 38 && pauseInMinutes <= 50){
+            return "45";
+        } else if (pauseInMinutes > 50){
+            return "60";
+        }
+        throw new IllegalStateException("Du warst zu faul, deine Pause kontte nicht geparst werden");
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private static long getPauseInMinutes(String currentDay, String beginnPause, String endePause) {
+        String pauseStartWithCurrentDay = currentDay + " " + beginnPause;
+        String pauseEndeWithCurrentDay = currentDay + " " + endePause;
+
+        DateTimeFormatter currentDayWithTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        LocalDateTime pauseStart = LocalDateTime.parse(pauseStartWithCurrentDay,currentDayWithTimeFormatter);
+        LocalDateTime pauseEnde = LocalDateTime.parse(pauseEndeWithCurrentDay,currentDayWithTimeFormatter);
+        Duration pauseDuration = Duration.between(pauseStart,pauseEnde);
+        long pauseInSeconds = pauseDuration.getSeconds();
+        return pauseInSeconds / 60;
     }
 
 }
