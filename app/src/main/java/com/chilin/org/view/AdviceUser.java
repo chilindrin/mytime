@@ -29,4 +29,9 @@ public class AdviceUser {
         builder.setMessage("Sorry! Das Backup konnte nicht erstellt werden").setPositiveButton("Ok", dialogSorryWeekend).show();
     }
 
+    public void showBeginnPauseAfterLeavingTime(Context context,String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(message).setPositiveButton("Ok", dialogSorryWeekend).show();
+    }
+
 }

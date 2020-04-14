@@ -13,14 +13,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.chilin.org.backup.BackupCreatorActivity;
+import com.chilin.org.constants.Operation;
 import com.chilin.org.db.TimeRegister;
+import com.chilin.org.exception.MyTimeException;
 import com.chilin.org.report.ReportCreatorActivity;
 import com.chilin.org.util.DateProvider;
 import com.chilin.org.view.AdviceUser;
+import com.chilin.org.view.InsertTime;
 
 import java.time.LocalDateTime;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final String CURENT_DATE = "CURRENT_DATE";
+    public static final String OPERATION = "OPERATION";
 
     private TimeRegister timeRegister;
     private LocalDateTime currentDate;
@@ -99,7 +105,19 @@ public class MainActivity extends AppCompatActivity {
         } else {
             TextView textViewCurrentDate = findViewById(R.id.currentDateTextView);
             String currentDate = (String) textViewCurrentDate.getText();
+            Intent intent = new Intent(this, InsertTime.class);
+            intent.putExtra(CURENT_DATE,currentDate);
+            intent.putExtra(OPERATION, Operation.BEGINN_PAUSE);
+            startActivity(intent);
+            //saveBeginnPause(currentDate);
+        }
+    }
+
+    private void saveBeginnPause(String currentDate) {
+        try {
             timeRegister.saveBeginnPause(currentDate);
+        } catch (MyTimeException ex){
+            new AdviceUser().showBeginnPauseAfterLeavingTime(this,ex.getMessage());
         }
     }
 

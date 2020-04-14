@@ -39,7 +39,8 @@ public class TimeRegister {
 
     public void saveBeginnPause(String currentDate) {
         if (getDbReader().isCurrentDateAlreadyInDB(currentDate)) {
-            getDbWriter().updateBeginnPause(currentDate);
+            String leavingTime = getDbReader().getLeavingTime(currentDate);
+            getDbWriter().updateBeginnPause(currentDate,leavingTime);
         } else {
             getDbWriter().createBeginnPause(currentDate);
         }

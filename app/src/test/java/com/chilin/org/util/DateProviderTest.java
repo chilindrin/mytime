@@ -4,8 +4,11 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.Date;
 
 class DateProviderTest {
 
@@ -92,6 +95,30 @@ class DateProviderTest {
     public void createPause_51MinutenPause_60MinutenPause(){
         String result = DateProvider.createPause("12-02-2020", "09:00","09:51");
         MatcherAssert.assertThat(result,Matchers.is("60"));
+    }
+
+    @Test
+    public void pauseBeginnAfterLeavingTime() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        Date beginnPause = formatter.parse("12-03-2020 18:30");
+        boolean result = DateProvider.isLeavingTimeBeforeBeginnPause("12-03-2020","18:00",beginnPause);
+        MatcherAssert.assertThat(result,Matchers.is(true));
+    }
+
+    @Test
+    public void pauseBeginnAtTheSameTimeAsLeavingTime() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        Date beginnPause = formatter.parse("12-03-2020 18:30");
+        boolean result = DateProvider.isLeavingTimeBeforeBeginnPause("12-03-2020","18:30",beginnPause);
+        MatcherAssert.assertThat(result,Matchers.is(false));
+    }
+
+    @Test
+    public void pauseBeginnBeforeLeavingTime() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        Date beginnPause = formatter.parse("12-03-2020 18:30");
+        boolean result = DateProvider.isLeavingTimeBeforeBeginnPause("12-03-2020","18:40",beginnPause);
+        MatcherAssert.assertThat(result,Matchers.is(false));
     }
 
 }

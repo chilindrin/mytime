@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.chilin.org.exception.MyTimeException;
+import com.chilin.org.util.DateProvider;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -68,15 +71,20 @@ public class DBWriter {
         writableDatabase.insert(TABLE_NAME, null, values);
     }
 
-    public void updateBeginnPause(String currentDate) {
+    public void updateBeginnPause(String currentDate,String leavingTime) {
+        Date beginnPause = Calendar.getInstance().getTime();
+        if (DateProvider.isLeavingTimeBeforeBeginnPause(currentDate,leavingTime,beginnPause)){
+            throw new MyTimeException("Du Depp versuchst eine Pause zu buchen, obwohl du eigentlich schon zuhause sein solltest");
+        }
+
         SQLiteDatabase writableDatabase = dbDealer.getWritableDatabase();
 
         String whereColumns = TimeDBSchema.DayEntry.COLUMN_NAME_DATE + " = ?";
         String[] whereValues = { currentDate };
 
-        Date currentTime = Calendar.getInstance().getTime();
+
         ContentValues values = new ContentValues();
-        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_BEGINN_PAUSE, FORMATTER.format(currentTime));
+        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_BEGINN_PAUSE, FORMATTER.format(beginnPause));
 
         writableDatabase.update(TABLE_NAME,
                 values,whereColumns,whereValues);

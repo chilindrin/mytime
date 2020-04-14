@@ -6,11 +6,14 @@ import androidx.annotation.RequiresApi;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
+import java.util.Date;
 
 public class DateProvider {
 
@@ -69,6 +72,19 @@ public class DateProvider {
         Duration pauseDuration = Duration.between(pauseStart,pauseEnde);
         long pauseInSeconds = pauseDuration.getSeconds();
         return pauseInSeconds / 60;
+    }
+
+    public static boolean isLeavingTimeBeforeBeginnPause(String currentDate, String leavingTime, Date beginnPause){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        String leavingTimeString = currentDate + " "+ leavingTime;
+        boolean leavingTimeBeforeBeginnPause = false;
+        try {
+            Date leavingTimeComplete = formatter.parse(leavingTimeString);
+            leavingTimeBeforeBeginnPause = leavingTimeComplete.before(beginnPause);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return leavingTimeBeforeBeginnPause;
     }
 
 }

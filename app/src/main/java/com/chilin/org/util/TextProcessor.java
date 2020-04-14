@@ -5,6 +5,9 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import com.chilin.org.constants.Operation;
+import com.chilin.org.exception.MyTimeException;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.Charset;
@@ -96,6 +99,13 @@ public class TextProcessor {
         return stringBuilder.toString();
     }
 
-
+    public static String getText(Operation operation){
+        switch (operation){
+            case BEGINN_PAUSE:
+                return "Pause ab wann?";
+            default:
+                throw new MyTimeException("The operation you are trying to do does not exist");
+        }
+    }
 
 }

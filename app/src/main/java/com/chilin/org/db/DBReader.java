@@ -41,6 +41,41 @@ public class DBReader {
         return true;
     }
 
+    public String getLeavingTime(String currentDate){
+        SQLiteDatabase readableDatabase = dbDealer.getReadableDatabase();
+
+        String[] selectColumns = { TimeDBSchema.DayEntry.COLUMN_NAME_LEAVING };
+
+        String whereColumns = TimeDBSchema.DayEntry.COLUMN_NAME_DATE + " = ?";
+        String[] whereValues = { currentDate };
+
+        Cursor cursor = readableDatabase.query(
+                TABLE_NAME,   // The table to query
+                selectColumns,             // The array of columns to return (pass null to get all)
+                whereColumns,              // The columns for the WHERE clause
+                whereValues,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        if (cursor.getCount() >1){
+            throw new IllegalStateException("There is more than one entry for the date: "+currentDate);
+        }
+        if (cursor.getCount() == 0){
+            throw new IllegalStateException("There are no entries for the date: "+currentDate);
+        }
+
+        String leavingTime = "";
+        while(cursor.moveToNext()) {
+            leavingTime = cursor.getString(
+                    cursor.getColumnIndexOrThrow(TimeDBSchema.DayEntry.COLUMN_NAME_LEAVING));
+        }
+
+        cursor.close();
+        return leavingTime;
+    }
+
     public List<String[]> getAllDataInDB(){
         SQLiteDatabase readableDatabase = dbDealer.getReadableDatabase();
 
