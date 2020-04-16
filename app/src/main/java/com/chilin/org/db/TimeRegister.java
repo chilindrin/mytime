@@ -40,6 +40,9 @@ public class TimeRegister {
     }
 
     public void saveBeginnPause(String currentDate, String beginnPause) {
+
+
+
         if (getDbReader().isCurrentDateAlreadyInDB(currentDate)) {
             Day registeredDay = getDbReader().getRegisteredDay(currentDate);
 

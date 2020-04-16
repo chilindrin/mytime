@@ -90,6 +90,11 @@ public class DBWriter {
                 values,whereColumns,whereValues);
     }
 
+    public void deleteInfo(){
+        SQLiteDatabase writableDatabase = dbDealer.getWritableDatabase();
+        writableDatabase.delete(TABLE_NAME,null,null);
+    }
+
     public void createBeginnPause(String currentDate) {
         Date currentTime = Calendar.getInstance().getTime();
         ContentValues values = new ContentValues();

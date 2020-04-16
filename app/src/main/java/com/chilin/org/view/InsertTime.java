@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 public class InsertTime extends AppCompatActivity {
 
     private Operation operationForThisActivity;
-    private LocalDateTime currentDate;
+    private LocalDateTime currentDateFromMainDisplay;
     private TimeRegister timeRegister;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -56,11 +56,11 @@ public class InsertTime extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setHoursAndMinutesToDisplay(){
         Intent intentFromMainActivity = getIntent();
-        currentDate = (LocalDateTime) intentFromMainActivity.getSerializableExtra(MainActivity.CURENT_DATE_OBJEKT);
+        currentDateFromMainDisplay = (LocalDateTime) intentFromMainActivity.getSerializableExtra(MainActivity.CURENT_DATE_OBJEKT);
         TextView hourTextView = findViewById(R.id.hourTextView);
-        hourTextView.setText(String.valueOf(currentDate.getHour()));
+        hourTextView.setText(String.valueOf(currentDateFromMainDisplay.getHour()));
         TextView minuteTextView = findViewById(R.id.minuteTextView);
-        minuteTextView.setText(String.valueOf(currentDate.getMinute()));
+        minuteTextView.setText(String.valueOf(currentDateFromMainDisplay.getMinute()));
     }
 
     public void changeTimeBeingDisplayed(View view){
@@ -84,7 +84,7 @@ public class InsertTime extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void saveBeginnPause() {
         try {
-            String currentDateddMMyyyy = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDate);
+            String currentDateddMMyyyy = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
             TextView hoursView = findViewById(R.id.hourTextView);
             String selectedHours = (String) hoursView.getText();
             TextView minutesView = findViewById(R.id.minuteTextView);
