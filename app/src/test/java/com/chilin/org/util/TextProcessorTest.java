@@ -2,9 +2,9 @@ package com.chilin.org.util;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-class TextProcessorTest {
+public class TextProcessorTest {
 
     @Test
     public void testConversion(){

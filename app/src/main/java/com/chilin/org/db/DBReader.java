@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.chilin.org.model.Day;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,10 +43,12 @@ public class DBReader {
         return true;
     }
 
-    public String getLeavingTime(String currentDate){
+    public Day getRegisteredDay(String currentDate){
         SQLiteDatabase readableDatabase = dbDealer.getReadableDatabase();
 
-        String[] selectColumns = { TimeDBSchema.DayEntry.COLUMN_NAME_LEAVING };
+        String[] selectColumns = { TimeDBSchema.DayEntry.COLUMN_NAME_DATE,
+                TimeDBSchema.DayEntry.COLUMN_NAME_COMMING,
+                TimeDBSchema.DayEntry.COLUMN_NAME_LEAVING };
 
         String whereColumns = TimeDBSchema.DayEntry.COLUMN_NAME_DATE + " = ?";
         String[] whereValues = { currentDate };
@@ -59,21 +63,27 @@ public class DBReader {
                 null               // The sort order
         );
 
-        if (cursor.getCount() >1){
-            throw new IllegalStateException("There is more than one entry for the date: "+currentDate);
-        }
-        if (cursor.getCount() == 0){
-            throw new IllegalStateException("There are no entries for the date: "+currentDate);
-        }
-
-        String leavingTime = "";
-        while(cursor.moveToNext()) {
-            leavingTime = cursor.getString(
-                    cursor.getColumnIndexOrThrow(TimeDBSchema.DayEntry.COLUMN_NAME_LEAVING));
-        }
+        Day result = validateAndExtractResult(currentDate, cursor);
 
         cursor.close();
-        return leavingTime;
+        return result;
+    }
+
+    private Day validateAndExtractResult(String currentDate, Cursor resultFromDB) {
+        if (resultFromDB.getCount() >1){
+            throw new IllegalStateException("There is more than one entry for the date: "+currentDate);
+        }
+        Day result = null;
+        if (resultFromDB.moveToNext()) {
+            result = new Day();
+            result.setDayRegistered(resultFromDB.getString(
+                    resultFromDB.getColumnIndexOrThrow(TimeDBSchema.DayEntry.COLUMN_NAME_DATE)));
+            result.setComingTime(resultFromDB.getString(
+                    resultFromDB.getColumnIndexOrThrow(TimeDBSchema.DayEntry.COLUMN_NAME_COMMING)));
+            result.setLeavingTime(resultFromDB.getString(
+                    resultFromDB.getColumnIndexOrThrow(TimeDBSchema.DayEntry.COLUMN_NAME_LEAVING)));
+        }
+        return result;
     }
 
     public List<String[]> getAllDataInDB(){

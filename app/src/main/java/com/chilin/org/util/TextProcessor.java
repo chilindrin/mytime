@@ -47,7 +47,7 @@ public class TextProcessor {
                     ? EMPTY_RESULT : content[DayTableOrder.ENDE_PAUSE_POSITION]);
             stringBuilder.append(',');
 
-            String pause = DateProvider.createPause(
+            String pause = DateTimeOperationsProvider.createPause(
                     content[DayTableOrder.CURRENT_DAY_POSITION],
                     content[DayTableOrder.BEGINN_PAUSE_POSITION],
                     content[DayTableOrder.ENDE_PAUSE_POSITION]);
@@ -106,6 +106,10 @@ public class TextProcessor {
             default:
                 throw new MyTimeException("The operation you are trying to do does not exist");
         }
+    }
+
+    public static String getTime(String hours,String minutes){
+        return hours + ":" + minutes;
     }
 
 }

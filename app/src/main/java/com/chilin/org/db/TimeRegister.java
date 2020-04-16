@@ -2,6 +2,8 @@ package com.chilin.org.db;
 
 import android.content.Context;
 
+import com.chilin.org.model.Day;
+
 import java.util.List;
 
 import lombok.Setter;
@@ -37,10 +39,11 @@ public class TimeRegister {
         }
     }
 
-    public void saveBeginnPause(String currentDate) {
+    public void saveBeginnPause(String currentDate, String beginnPause) {
         if (getDbReader().isCurrentDateAlreadyInDB(currentDate)) {
-            String leavingTime = getDbReader().getLeavingTime(currentDate);
-            getDbWriter().updateBeginnPause(currentDate,leavingTime);
+            Day registeredDay = getDbReader().getRegisteredDay(currentDate);
+
+            //getDbWriter().updateBeginnPause(currentDate,leavingTime);
         } else {
             getDbWriter().createBeginnPause(currentDate);
         }

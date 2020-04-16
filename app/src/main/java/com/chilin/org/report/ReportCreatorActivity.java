@@ -15,7 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.chilin.org.R;
 import com.chilin.org.db.TimeRegister;
-import com.chilin.org.util.DateProvider;
+import com.chilin.org.util.DateTimeOperationsProvider;
 import com.chilin.org.util.DayTableOrder;
 
 import org.apache.commons.lang3.StringUtils;
@@ -89,7 +89,7 @@ public class ReportCreatorActivity extends AppCompatActivity {
         TextView workingDay = createTextCell(dailyReport[DayTableOrder.CURRENT_DAY_POSITION]);
         TextView comingTime = createTextCell(dailyReport[DayTableOrder.COMMING_POSITION]);
         TextView leavingTime = createTextCell(dailyReport[DayTableOrder.LEAVING_POSITION]);
-        TextView pauseView = createTextCell(DateProvider.createPause(
+        TextView pauseView = createTextCell(DateTimeOperationsProvider.createPause(
                 dailyReport[DayTableOrder.CURRENT_DAY_POSITION],
                 dailyReport[DayTableOrder.BEGINN_PAUSE_POSITION],
                 dailyReport[DayTableOrder.ENDE_PAUSE_POSITION]));

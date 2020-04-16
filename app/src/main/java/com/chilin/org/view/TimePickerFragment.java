@@ -1,23 +1,27 @@
 package com.chilin.org.view;
 
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentActivity;
-
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.widget.TextView;
 import android.widget.TimePicker;
+
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
 
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
-    private int hourPickedByUser;
-    private int minutePickedByUser;
+    private TextView hourTextView;
+    private TextView minuteTextView;
+
+    public TimePickerFragment(TextView hourTextView, TextView minuteTextView){
+        this.hourTextView = hourTextView;
+        this.minuteTextView = minuteTextView;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -30,16 +34,10 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
                 DateFormat.is24HourFormat(getActivity()));
     }
 
-    public int getHourPickedByUser(){
-        return this.hourPickedByUser;
-    }
-
-    public int getMinutePickedByUser(){
-        return this.minutePickedByUser;
-    }
-
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-
+        this.hourTextView.setText(String.valueOf(timePicker.getHour()));
+        this.minuteTextView.setText(String.valueOf(timePicker.getMinute()));
     }
 }

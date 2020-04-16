@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.util.Date;
 
-public class DateProvider {
+public class DateTimeOperationsProvider {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public static String getFriendlyFormatCurrentDate(LocalDateTime currentDate){
@@ -86,5 +86,7 @@ public class DateProvider {
         }
         return leavingTimeBeforeBeginnPause;
     }
+
+
 
 }

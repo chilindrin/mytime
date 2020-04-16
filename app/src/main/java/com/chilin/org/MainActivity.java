@@ -17,7 +17,7 @@ import com.chilin.org.constants.Operation;
 import com.chilin.org.db.TimeRegister;
 import com.chilin.org.exception.MyTimeException;
 import com.chilin.org.report.ReportCreatorActivity;
-import com.chilin.org.util.DateProvider;
+import com.chilin.org.util.DateTimeOperationsProvider;
 import com.chilin.org.view.AdviceUser;
 import com.chilin.org.view.InsertTime;
 
@@ -25,8 +25,8 @@ import java.time.LocalDateTime;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String CURENT_DATE = "CURRENT_DATE";
     public static final String OPERATION = "OPERATION";
+    public static final String CURENT_DATE_OBJEKT = "CURRENT_DATE_OBJEKT";
 
     private TimeRegister timeRegister;
     private LocalDateTime currentDate;
@@ -65,15 +65,15 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setCurrentDateOnDisplay() {
-        this.currentDate = DateProvider.getCurrentDate();
+        this.currentDate = DateTimeOperationsProvider.getCurrentDate();
 
         TextView currentDateTextView = findViewById(R.id.currentDateTextView);
-        currentDateTextView.setText(DateProvider.getFriendlyFormatCurrentDate(this.currentDate));
+        currentDateTextView.setText(DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDate));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void saveLeavingTime(View view) {
-        if (DateProvider.isWeekend(this.currentDate)){
+        if (DateTimeOperationsProvider.isWeekend(this.currentDate)){
             new AdviceUser().showSorryWeekend(view.getContext());
         } else {
             TextView textViewCurrentDate = findViewById(R.id.currentDateTextView);
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void saveComingTime(View view){
-        if (DateProvider.isWeekend(this.currentDate)){
+        if (DateTimeOperationsProvider.isWeekend(this.currentDate)){
             new AdviceUser().showSorryWeekend(view.getContext());
         } else {
             TextView textViewCurrentDate = findViewById(R.id.currentDateTextView);
@@ -100,13 +100,11 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void beginnPause(View view){
-        if (DateProvider.isWeekend(this.currentDate)){
+        if (DateTimeOperationsProvider.isWeekend(this.currentDate)){
             new AdviceUser().showSorryWeekend(view.getContext());
         } else {
-            TextView textViewCurrentDate = findViewById(R.id.currentDateTextView);
-            String currentDate = (String) textViewCurrentDate.getText();
             Intent intent = new Intent(this, InsertTime.class);
-            intent.putExtra(CURENT_DATE,currentDate);
+            intent.putExtra(CURENT_DATE_OBJEKT,this.currentDate);
             intent.putExtra(OPERATION, Operation.BEGINN_PAUSE);
             startActivity(intent);
             //saveBeginnPause(currentDate);
@@ -115,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveBeginnPause(String currentDate) {
         try {
-            timeRegister.saveBeginnPause(currentDate);
+            timeRegister.saveBeginnPause(currentDate,"");
         } catch (MyTimeException ex){
             new AdviceUser().showBeginnPauseAfterLeavingTime(this,ex.getMessage());
         }
@@ -123,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void endePause(View view){
-        if (DateProvider.isWeekend(this.currentDate)){
+        if (DateTimeOperationsProvider.isWeekend(this.currentDate)){
             new AdviceUser().showSorryWeekend(view.getContext());
         } else {
             TextView textViewCurrentDate = findViewById(R.id.currentDateTextView);

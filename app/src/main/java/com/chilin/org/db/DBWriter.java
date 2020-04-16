@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.chilin.org.exception.MyTimeException;
-import com.chilin.org.util.DateProvider;
+import com.chilin.org.util.DateTimeOperationsProvider;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -73,7 +73,7 @@ public class DBWriter {
 
     public void updateBeginnPause(String currentDate,String leavingTime) {
         Date beginnPause = Calendar.getInstance().getTime();
-        if (DateProvider.isLeavingTimeBeforeBeginnPause(currentDate,leavingTime,beginnPause)){
+        if (DateTimeOperationsProvider.isLeavingTimeBeforeBeginnPause(currentDate,leavingTime,beginnPause)){
             throw new MyTimeException("Du Depp versuchst eine Pause zu buchen, obwohl du eigentlich schon zuhause sein solltest");
         }
 
