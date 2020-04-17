@@ -10,5 +10,6 @@ public class Day {
     private String dayRegistered;
     private String comingTime;
     private String leavingTime;
+    private String beginnPause;
 
 }

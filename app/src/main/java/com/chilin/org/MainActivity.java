@@ -15,7 +15,6 @@ import androidx.appcompat.widget.Toolbar;
 import com.chilin.org.backup.BackupCreatorActivity;
 import com.chilin.org.constants.Operation;
 import com.chilin.org.db.TimeRegister;
-import com.chilin.org.exception.MyTimeException;
 import com.chilin.org.report.ReportCreatorActivity;
 import com.chilin.org.util.DateTimeOperationsProvider;
 import com.chilin.org.view.AdviceUser;
@@ -107,15 +106,6 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(CURENT_DATE_OBJEKT,this.currentDate);
             intent.putExtra(OPERATION, Operation.BEGINN_PAUSE);
             startActivity(intent);
-            //saveBeginnPause(currentDate);
-        }
-    }
-
-    private void saveBeginnPause(String currentDate) {
-        try {
-            timeRegister.saveBeginnPause(currentDate,"");
-        } catch (MyTimeException ex){
-            new AdviceUser().showBeginnPauseAfterLeavingTime(this,ex.getMessage());
         }
     }
 

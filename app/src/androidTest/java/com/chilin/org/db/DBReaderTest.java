@@ -4,17 +4,14 @@ import android.content.Context;
 
 import androidx.test.core.app.ApplicationProvider;
 
+import com.chilin.org.exception.MyTimeException;
 import com.chilin.org.model.Day;
-import com.chilin.org.util.DateTimeOperationsProvider;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 public class DBReaderTest {
 
@@ -39,10 +36,9 @@ public class DBReaderTest {
     @Test
     public void getRegisteredDay_OneRegisterForOneDayCreated_QueryReturnsThisDay(){
         // Given
-        cleanData();
+        String currentDate = "24-12-2020";
+        cleanData(currentDate);
 
-        LocalDateTime currentTime = DateTimeOperationsProvider.getCurrentDate();
-        String currentDate = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(currentTime);
         dbWriter.createComingTime(currentDate);
 
         // When
@@ -53,16 +49,15 @@ public class DBReaderTest {
         MatcherAssert.assertThat(registeredDay.getDayRegistered(),CoreMatchers.is(currentDate));
         MatcherAssert.assertThat(registeredDay.getComingTime(),CoreMatchers.notNullValue());
 
-        cleanData();
+        cleanData(currentDate);
     }
 
     @Test
     public void getRegisteredDay_TwoEntriesForOneDayCreated_ExceptionThrown(){
         // Given
-        cleanData();
+        String currentDate = "24-12-2020";
+        cleanData(currentDate);
 
-        LocalDateTime currentTime = DateTimeOperationsProvider.getCurrentDate();
-        String currentDate = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(currentTime);
         dbWriter.createComingTime(currentDate);
         dbWriter.createComingTime(currentDate);
         boolean desiredExceptionWasThrown = false;
@@ -70,19 +65,30 @@ public class DBReaderTest {
         try {
             // When
             sut.getRegisteredDay(currentDate);
-        } catch (IllegalStateException ex){
+        } catch (MyTimeException ex){
             desiredExceptionWasThrown = true;
         } finally {
             // Then
             MatcherAssert.assertThat(desiredExceptionWasThrown,CoreMatchers.is(true));
-            cleanData();
+            cleanData(currentDate);
         }
     }
 
-    private void cleanData(){
-        dbWriter.deleteInfo();
-        List<String[]> allDataInDB = sut.getAllDataInDB();
-        MatcherAssert.assertThat(allDataInDB.size(), CoreMatchers.is(0));
+    @Test
+    public void getRegisteredDay_NoEntriesForOneDayCreated_ReturnsNull(){
+        // Given
+        String currentDate = "24-12-2020";
+        cleanData(currentDate);
+
+        // When
+        Day registeredDay = sut.getRegisteredDay(currentDate);
+
+        // Then
+        MatcherAssert.assertThat(registeredDay,CoreMatchers.nullValue());
+    }
+
+    private void cleanData(String currentDate){
+        dbWriter.deleteInfo(currentDate);
     }
 
 }

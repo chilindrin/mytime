@@ -74,19 +74,35 @@ public class DateTimeOperationsProvider {
         return pauseInSeconds / 60;
     }
 
-    public static boolean isLeavingTimeBeforeBeginnPause(String currentDate, String leavingTime, Date beginnPause){
+    public static boolean isBeginnPauseBetweenComingAndLeavingTime(String currentDate, String comingTime, String leavingTime, String beginnPause) {
+        Date comingTimeComplete = createDateForTime(currentDate, comingTime);
+        Date leavingTimeComplete = createDateForTime(currentDate, leavingTime);
+        Date beginnPauseComlete = createDateForTime(currentDate, beginnPause);
+        return beginnPauseComlete.after(comingTimeComplete) && beginnPauseComlete.before(leavingTimeComplete);
+    }
+
+    public static boolean isBeginnPauseBeforeComingTime(String currentDate, String comingTime, String beginnPause) {
+        Date comingTimeComplete = createDateForTime(currentDate, comingTime);
+        Date beginnPauseComlete = createDateForTime(currentDate, beginnPause);
+        return beginnPauseComlete.before(comingTimeComplete);
+    }
+
+    public static boolean isBeginnPauseAfterLeavingTime(String currentDate, String leavingTime, String beginnPause) {
+        Date leavingTimeComplete = createDateForTime(currentDate, leavingTime);
+        Date beginnPauseComlete = createDateForTime(currentDate, beginnPause);
+        return beginnPauseComlete.after(leavingTimeComplete) || beginnPauseComlete.equals(leavingTimeComplete);
+    }
+
+    private static Date createDateForTime(String currentDate,String time){
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        String leavingTimeString = currentDate + " "+ leavingTime;
-        boolean leavingTimeBeforeBeginnPause = false;
+        String timeString = currentDate + " " + time;
+        Date dateForTime = null;
         try {
-            Date leavingTimeComplete = formatter.parse(leavingTimeString);
-            leavingTimeBeforeBeginnPause = leavingTimeComplete.before(beginnPause);
+            dateForTime = formatter.parse(timeString);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return leavingTimeBeforeBeginnPause;
+        return dateForTime;
     }
-
-
 
 }

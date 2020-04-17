@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.chilin.org.exception.MyTimeException;
 import com.chilin.org.model.Day;
 
 import java.util.ArrayList;
@@ -48,7 +49,8 @@ public class DBReader {
 
         String[] selectColumns = { TimeDBSchema.DayEntry.COLUMN_NAME_DATE,
                 TimeDBSchema.DayEntry.COLUMN_NAME_COMMING,
-                TimeDBSchema.DayEntry.COLUMN_NAME_LEAVING };
+                TimeDBSchema.DayEntry.COLUMN_NAME_LEAVING,
+        TimeDBSchema.DayEntry.COLUMN_NAME_BEGINN_PAUSE};
 
         String whereColumns = TimeDBSchema.DayEntry.COLUMN_NAME_DATE + " = ?";
         String[] whereValues = { currentDate };
@@ -71,7 +73,7 @@ public class DBReader {
 
     private Day validateAndExtractResult(String currentDate, Cursor resultFromDB) {
         if (resultFromDB.getCount() >1){
-            throw new IllegalStateException("There is more than one entry for the date: "+currentDate);
+            throw new MyTimeException("There is more than one entry for the date: "+currentDate);
         }
         Day result = null;
         if (resultFromDB.moveToNext()) {
@@ -82,6 +84,8 @@ public class DBReader {
                     resultFromDB.getColumnIndexOrThrow(TimeDBSchema.DayEntry.COLUMN_NAME_COMMING)));
             result.setLeavingTime(resultFromDB.getString(
                     resultFromDB.getColumnIndexOrThrow(TimeDBSchema.DayEntry.COLUMN_NAME_LEAVING)));
+            result.setBeginnPause(resultFromDB.getString(
+                    resultFromDB.getColumnIndexOrThrow(TimeDBSchema.DayEntry.COLUMN_NAME_BEGINN_PAUSE)));
         }
         return result;
     }

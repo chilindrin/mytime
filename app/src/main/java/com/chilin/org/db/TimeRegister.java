@@ -2,7 +2,11 @@ package com.chilin.org.db;
 
 import android.content.Context;
 
+import com.chilin.org.exception.MyTimeException;
 import com.chilin.org.model.Day;
+import com.chilin.org.util.DateTimeOperationsProvider;
+
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -40,16 +44,36 @@ public class TimeRegister {
     }
 
     public void saveBeginnPause(String currentDate, String beginnPause) {
-
-
-
-        if (getDbReader().isCurrentDateAlreadyInDB(currentDate)) {
-            Day registeredDay = getDbReader().getRegisteredDay(currentDate);
-
-            //getDbWriter().updateBeginnPause(currentDate,leavingTime);
+        Day registeredDay = getDbReader().getRegisteredDay(currentDate);
+        if (noRegistryInDB(registeredDay)){
+            getDbWriter().createBeginnPause(currentDate,beginnPause);
         } else {
-            getDbWriter().createBeginnPause(currentDate);
+            validateBeginnPause(registeredDay,beginnPause);
+            getDbWriter().updateBeginnPause(currentDate,beginnPause);
         }
+    }
+
+    private void validateBeginnPause(Day registeredDay, String beginnPause) {
+        String currentDate = registeredDay.getDayRegistered();
+        String leavingTime = registeredDay.getLeavingTime();
+        String comingTime = registeredDay.getComingTime();
+        if (StringUtils.isNotBlank(comingTime) && StringUtils.isNotBlank(leavingTime)){
+            if (DateTimeOperationsProvider.isBeginnPauseBetweenComingAndLeavingTime(currentDate,comingTime,leavingTime,beginnPause)){
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
+        } else if (StringUtils.isNotBlank(comingTime) && StringUtils.isBlank(leavingTime)){
+            if (DateTimeOperationsProvider.isBeginnPauseBeforeComingTime(currentDate,comingTime,beginnPause)){
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
+        } else if (StringUtils.isBlank(comingTime) && StringUtils.isNotBlank(leavingTime)){
+            if (DateTimeOperationsProvider.isBeginnPauseAfterLeavingTime(currentDate,comingTime,beginnPause)){
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
+        }
+    }
+
+    private boolean noRegistryInDB(Day registeredDay) {
+        return registeredDay == null;
     }
 
     public void saveEndePause(String currentDate) {
@@ -72,5 +96,19 @@ public class TimeRegister {
             this.dbWriter = new DBWriter(this.context);
         }
         return this.dbWriter;
+    }
+
+    /*
+    Seam fuer UnitTest
+     */
+    void setDbReader(DBReader dbReader){
+        this.dbReader = dbReader;
+    }
+
+    /*
+    Seam fuer UnitTest
+     */
+    void setDbWriter(DBWriter dbWriter){
+        this.dbWriter = dbWriter;
     }
 }

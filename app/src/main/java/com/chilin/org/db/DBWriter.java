@@ -4,9 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.chilin.org.exception.MyTimeException;
-import com.chilin.org.util.DateTimeOperationsProvider;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -71,35 +68,30 @@ public class DBWriter {
         writableDatabase.insert(TABLE_NAME, null, values);
     }
 
-    public void updateBeginnPause(String currentDate,String leavingTime) {
-        Date beginnPause = Calendar.getInstance().getTime();
-        if (DateTimeOperationsProvider.isLeavingTimeBeforeBeginnPause(currentDate,leavingTime,beginnPause)){
-            throw new MyTimeException("Du Depp versuchst eine Pause zu buchen, obwohl du eigentlich schon zuhause sein solltest");
-        }
-
+    public void updateBeginnPause(String currentDate,String beginnPause) {
         SQLiteDatabase writableDatabase = dbDealer.getWritableDatabase();
 
         String whereColumns = TimeDBSchema.DayEntry.COLUMN_NAME_DATE + " = ?";
         String[] whereValues = { currentDate };
 
-
         ContentValues values = new ContentValues();
-        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_BEGINN_PAUSE, FORMATTER.format(beginnPause));
+        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_BEGINN_PAUSE, beginnPause);
 
         writableDatabase.update(TABLE_NAME,
                 values,whereColumns,whereValues);
     }
 
-    public void deleteInfo(){
+    public void deleteInfo(String currentDate){
+        String whereColumns = TimeDBSchema.DayEntry.COLUMN_NAME_DATE + " = ?";
+        String[] whereValues = { currentDate };
         SQLiteDatabase writableDatabase = dbDealer.getWritableDatabase();
-        writableDatabase.delete(TABLE_NAME,null,null);
+        writableDatabase.delete(TABLE_NAME,whereColumns,whereValues);
     }
 
-    public void createBeginnPause(String currentDate) {
-        Date currentTime = Calendar.getInstance().getTime();
+    public void createBeginnPause(String currentDate, String beginnPause) {
         ContentValues values = new ContentValues();
         values.put(TimeDBSchema.DayEntry.COLUMN_NAME_DATE, currentDate);
-        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_BEGINN_PAUSE, FORMATTER.format(currentTime));
+        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_BEGINN_PAUSE, beginnPause);
 
         SQLiteDatabase writableDatabase = dbDealer.getWritableDatabase();
         writableDatabase.insert(TABLE_NAME, null, values);

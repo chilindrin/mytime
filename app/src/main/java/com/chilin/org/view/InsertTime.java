@@ -75,6 +75,7 @@ public class InsertTime extends AppCompatActivity {
         switch (this.operationForThisActivity){
             case BEGINN_PAUSE:
                 saveBeginnPause();
+                finish();
                 break;
             default:
                 throw new MyTimeException("There is no other operation to perform");
@@ -84,13 +85,13 @@ public class InsertTime extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void saveBeginnPause() {
         try {
-            String currentDateddMMyyyy = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
+            String friendlyCurrentDateMainDisplay = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
             TextView hoursView = findViewById(R.id.hourTextView);
             String selectedHours = (String) hoursView.getText();
             TextView minutesView = findViewById(R.id.minuteTextView);
             String selectedMinutes = (String) minutesView.getText();
             String beginnPause = TextProcessor.getTime(selectedHours,selectedMinutes);
-            timeRegister.saveBeginnPause(currentDateddMMyyyy,beginnPause);
+            timeRegister.saveBeginnPause(friendlyCurrentDateMainDisplay,beginnPause);
         } catch (MyTimeException ex){
             new AdviceUser().showBeginnPauseAfterLeavingTime(this,ex.getMessage());
         }
