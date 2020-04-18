@@ -99,17 +99,19 @@ public class TextProcessor {
         return stringBuilder.toString();
     }
 
-    public static String getText(Operation operation){
+    public static String getTextForOperation(Operation operation){
         switch (operation){
             case BEGINN_PAUSE:
                 return "Pause ab wann?";
+            case COMING:
+                return "Guten morgen!";
             default:
                 throw new MyTimeException("The operation you are trying to do does not exist");
         }
     }
 
-    public static String getTime(String hours,String minutes){
-        return hours + ":" + minutes;
+    public static String getTime(int hours,int minutes){
+        return String.format("%02d:%02d", hours, minutes);
     }
 
 }

@@ -43,26 +43,23 @@ public class DBWriter {
         writableDatabase.insert(TABLE_NAME, null, values);
     }
 
-    public void updateComingTime(String currentDate) {
+    public void updateComingTime(String currentDate,String comingTime) {
         SQLiteDatabase writableDatabase = dbDealer.getWritableDatabase();
 
         String whereColumns = TimeDBSchema.DayEntry.COLUMN_NAME_DATE + " = ?";
         String[] whereValues = { currentDate };
 
-        Date currentTime = Calendar.getInstance().getTime();
-
         ContentValues values = new ContentValues();
-        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_COMMING, FORMATTER.format(currentTime));
+        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_COMMING, comingTime);
 
         writableDatabase.update(TABLE_NAME,
                 values,whereColumns,whereValues);
     }
 
-    public void  createComingTime(String currentDate) {
-        Date currentTime = Calendar.getInstance().getTime();
+    public void  createComingTime(String currentDate,String comingTime) {
         ContentValues values = new ContentValues();
         values.put(TimeDBSchema.DayEntry.COLUMN_NAME_DATE, currentDate);
-        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_COMMING, FORMATTER.format(currentTime));
+        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_COMMING, comingTime);
 
         SQLiteDatabase writableDatabase = dbDealer.getWritableDatabase();
         writableDatabase.insert(TABLE_NAME, null, values);

@@ -86,9 +86,10 @@ public class MainActivity extends AppCompatActivity {
         if (DateTimeOperationsProvider.isWeekend(this.currentDate)){
             new AdviceUser().showSorryWeekend(view.getContext());
         } else {
-            TextView textViewCurrentDate = findViewById(R.id.currentDateTextView);
-            String currentDate = (String) textViewCurrentDate.getText();
-            timeRegister.saveComingTime(currentDate);
+            Intent intent = new Intent(this, InsertTime.class);
+            intent.putExtra(CURENT_DATE_OBJEKT,this.currentDate);
+            intent.putExtra(OPERATION, Operation.COMING);
+            startActivity(intent);
         }
     }
 

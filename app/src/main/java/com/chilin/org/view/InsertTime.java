@@ -42,8 +42,8 @@ public class InsertTime extends AppCompatActivity {
     private void setOperationToDo() {
         Intent intent = getIntent();
         this.operationForThisActivity = (Operation) intent.getSerializableExtra(MainActivity.OPERATION);
-        TextView textField = findViewById(R.id.textView3);
-        textField.setText(TextProcessor.getText(this.operationForThisActivity));
+        TextView operationToDoView = findViewById(R.id.operationToDoView);
+        operationToDoView.setText(TextProcessor.getTextForOperation(this.operationForThisActivity));
     }
 
     private void setUpButtonInToolbar() {
@@ -77,8 +77,27 @@ public class InsertTime extends AppCompatActivity {
                 saveBeginnPause();
                 finish();
                 break;
+            case COMING:
+                saveComingTime();
+                finish();
+                break;
             default:
                 throw new MyTimeException("There is no other operation to perform");
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void saveComingTime() {
+        try {
+            String friendlyCurrentDateMainDisplay = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
+            TextView hoursView = findViewById(R.id.hourTextView);
+            String selectedHours = (String) hoursView.getText();
+            TextView minutesView = findViewById(R.id.minuteTextView);
+            String selectedMinutes = (String) minutesView.getText();
+            String comingTime = TextProcessor.getTime(Integer.parseInt(selectedHours),Integer.parseInt(selectedMinutes));
+            timeRegister.saveComingTime(friendlyCurrentDateMainDisplay,comingTime);
+        } catch (MyTimeException ex){
+            new AdviceUser().showBeginnPauseAfterLeavingTime(this,ex.getMessage());
         }
     }
 
@@ -90,7 +109,7 @@ public class InsertTime extends AppCompatActivity {
             String selectedHours = (String) hoursView.getText();
             TextView minutesView = findViewById(R.id.minuteTextView);
             String selectedMinutes = (String) minutesView.getText();
-            String beginnPause = TextProcessor.getTime(selectedHours,selectedMinutes);
+            String beginnPause = TextProcessor.getTime(Integer.parseInt(selectedHours),Integer.parseInt(selectedMinutes));
             timeRegister.saveBeginnPause(friendlyCurrentDateMainDisplay,beginnPause);
         } catch (MyTimeException ex){
             new AdviceUser().showBeginnPauseAfterLeavingTime(this,ex.getMessage());

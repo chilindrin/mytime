@@ -70,6 +70,7 @@ public class TimeRegisterTest {
         Day registeredDay = new Day();
         registeredDay.setComingTime("09:00");
         registeredDay.setLeavingTime("09:30");
+        registeredDay.setEndePause("9:05");
         registeredDay.setDayRegistered(currentDate);
         Mockito.doReturn(registeredDay).when(dbReaderStub).getRegisteredDay(currentDate);
 

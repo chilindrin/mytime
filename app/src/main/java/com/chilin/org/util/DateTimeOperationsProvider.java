@@ -4,6 +4,9 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.chilin.org.exception.MyTimeException;
+import com.chilin.org.model.Day;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.ParseException;
@@ -74,17 +77,26 @@ public class DateTimeOperationsProvider {
         return pauseInSeconds / 60;
     }
 
-    public static boolean isBeginnPauseBetweenComingAndLeavingTime(String currentDate, String comingTime, String leavingTime, String beginnPause) {
+    public static boolean isBeginnPausePailas(String currentDate, String comingTime, String leavingTime, String beginnPause, String endePause) {
         Date comingTimeComplete = createDateForTime(currentDate, comingTime);
         Date leavingTimeComplete = createDateForTime(currentDate, leavingTime);
         Date beginnPauseComlete = createDateForTime(currentDate, beginnPause);
-        return beginnPauseComlete.after(comingTimeComplete) && beginnPauseComlete.before(leavingTimeComplete);
+        Date endePauseComplete = createDateForTime(currentDate, endePause);
+        return beginnPauseComlete.before(comingTimeComplete)
+                || beginnPauseComlete.equals(comingTimeComplete)
+                || beginnPauseComlete.after(endePauseComplete)
+                || beginnPauseComlete.equals(endePauseComplete)
+                || beginnPauseComlete.after(leavingTimeComplete);
     }
 
-    public static boolean isBeginnPauseBeforeComingTime(String currentDate, String comingTime, String beginnPause) {
+    public static boolean isBeginnPauseNotAfterComingTimeNorBeforeEndePause(String currentDate, String comingTime, String beginnPause, String endePause) {
         Date comingTimeComplete = createDateForTime(currentDate, comingTime);
         Date beginnPauseComlete = createDateForTime(currentDate, beginnPause);
-        return beginnPauseComlete.before(comingTimeComplete);
+        Date endePauseComplete = createDateForTime(currentDate,endePause);
+        return beginnPauseComlete.before(comingTimeComplete) ||
+                beginnPauseComlete.equals(comingTimeComplete) ||
+                beginnPauseComlete.equals(endePauseComplete) ||
+                beginnPauseComlete.after(endePauseComplete);
     }
 
     public static boolean isBeginnPauseAfterLeavingTime(String currentDate, String leavingTime, String beginnPause) {
@@ -105,4 +117,37 @@ public class DateTimeOperationsProvider {
         return dateForTime;
     }
 
+    public static void validateBeginnPause(Day registeredDay, String beginnPause) {
+        String currentDate = registeredDay.getDayRegistered();
+        String leavingTime = registeredDay.getLeavingTime();
+        String comingTime = registeredDay.getComingTime();
+        String endePause = registeredDay.getEndePause();
+        if (StringUtils.isNotBlank(comingTime)
+                && StringUtils.isNotBlank(leavingTime)
+                && StringUtils.isNotBlank(endePause)) {
+            if (isBeginnPausePailas(currentDate, comingTime, leavingTime, beginnPause, endePause)) {
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
+        } else if (StringUtils.isNotBlank(comingTime)
+                && StringUtils.isBlank(leavingTime)
+                && StringUtils.isNotBlank(endePause)) {
+            if (isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate, comingTime, beginnPause, endePause)) {
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
+        } else if (StringUtils.isBlank(comingTime)
+                && StringUtils.isNotBlank(endePause)
+        && StringUtils.isNotBlank(leavingTime)) {
+            if (isBeginnPauseNotBeforeEndePauseAndNotBeforeLeavingTime(currentDate, beginnPause, endePause, leavingTime)) {
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
+        }
+    }
+
+    private static boolean isBeginnPauseNotBeforeEndePauseAndNotBeforeLeavingTime(String currentDate, String beginnPause, String endePause, String leavingTime) {
+        return true;
+    }
+
+    public static void validateComingTime(Day registeredDay, String comingTime) {
+
+    }
 }

@@ -1,5 +1,6 @@
 package com.chilin.org.util;
 
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -17,6 +18,22 @@ public class TextProcessorTest {
     @Test
     public void testListToString(){
         String result = TextProcessor.convertList();
+    }
+
+    @Test
+    public void getTime_MinutesAndHoursWithNoLeadingZeros_HourWithLeadingZerosForHoursAndMinutes(){
+        int hours = 9;
+        int minutes = 9;
+        String time = TextProcessor.getTime(hours, minutes);
+        MatcherAssert.assertThat(time, CoreMatchers.is("09:09"));
+    }
+
+    @Test
+    public void getTime_TwoDigisMinutesAndHours_SameOutputAsInput(){
+        int hours = 21;
+        int minutes = 21;
+        String time = TextProcessor.getTime(hours, minutes);
+        MatcherAssert.assertThat(time, CoreMatchers.is("21:21"));
     }
 
 }

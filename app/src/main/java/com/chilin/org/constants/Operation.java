@@ -2,6 +2,7 @@ package com.chilin.org.constants;
 
 public enum Operation {
 
-    BEGINN_PAUSE
+    BEGINN_PAUSE,
+    COMING
 
 }

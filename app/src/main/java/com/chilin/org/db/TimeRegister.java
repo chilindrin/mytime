@@ -35,11 +35,13 @@ public class TimeRegister {
         return getDbReader().getAllDataInDB();
     }
 
-    public void saveComingTime(String currentDate) {
-        if (getDbReader().isCurrentDateAlreadyInDB(currentDate)) {
-            getDbWriter().updateComingTime(currentDate);
+    public void saveComingTime(String currentDate,String comingTime) {
+        Day registeredDay = getDbReader().getRegisteredDay(currentDate);
+        if (noRegistryInDB(registeredDay)){
+            getDbWriter().createComingTime(currentDate,comingTime);
         } else {
-            getDbWriter().createComingTime(currentDate);
+            DateTimeOperationsProvider.validateComingTime(registeredDay,comingTime);
+            getDbWriter().updateComingTime(currentDate,comingTime);
         }
     }
 
@@ -48,27 +50,8 @@ public class TimeRegister {
         if (noRegistryInDB(registeredDay)){
             getDbWriter().createBeginnPause(currentDate,beginnPause);
         } else {
-            validateBeginnPause(registeredDay,beginnPause);
+            DateTimeOperationsProvider.validateBeginnPause(registeredDay,beginnPause);
             getDbWriter().updateBeginnPause(currentDate,beginnPause);
-        }
-    }
-
-    private void validateBeginnPause(Day registeredDay, String beginnPause) {
-        String currentDate = registeredDay.getDayRegistered();
-        String leavingTime = registeredDay.getLeavingTime();
-        String comingTime = registeredDay.getComingTime();
-        if (StringUtils.isNotBlank(comingTime) && StringUtils.isNotBlank(leavingTime)){
-            if (DateTimeOperationsProvider.isBeginnPauseBetweenComingAndLeavingTime(currentDate,comingTime,leavingTime,beginnPause)){
-                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
-            }
-        } else if (StringUtils.isNotBlank(comingTime) && StringUtils.isBlank(leavingTime)){
-            if (DateTimeOperationsProvider.isBeginnPauseBeforeComingTime(currentDate,comingTime,beginnPause)){
-                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
-            }
-        } else if (StringUtils.isBlank(comingTime) && StringUtils.isNotBlank(leavingTime)){
-            if (DateTimeOperationsProvider.isBeginnPauseAfterLeavingTime(currentDate,comingTime,beginnPause)){
-                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
-            }
         }
     }
 

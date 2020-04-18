@@ -37,9 +37,10 @@ public class DBReaderTest {
     public void getRegisteredDay_OneRegisterForOneDayCreated_QueryReturnsThisDay(){
         // Given
         String currentDate = "24-12-2020";
+        String comingTime = "09:10";
         cleanData(currentDate);
 
-        dbWriter.createComingTime(currentDate);
+        dbWriter.createComingTime(currentDate,comingTime);
 
         // When
         Day registeredDay = sut.getRegisteredDay(currentDate);
@@ -56,10 +57,11 @@ public class DBReaderTest {
     public void getRegisteredDay_TwoEntriesForOneDayCreated_ExceptionThrown(){
         // Given
         String currentDate = "24-12-2020";
+        String comingTime = "09:10";
         cleanData(currentDate);
 
-        dbWriter.createComingTime(currentDate);
-        dbWriter.createComingTime(currentDate);
+        dbWriter.createComingTime(currentDate,comingTime);
+        dbWriter.createComingTime(currentDate,comingTime);
         boolean desiredExceptionWasThrown = false;
 
         try {

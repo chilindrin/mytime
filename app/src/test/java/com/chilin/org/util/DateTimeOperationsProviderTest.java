@@ -95,128 +95,236 @@ public class DateTimeOperationsProviderTest {
     }
 
     @Test
-    public void pauseBeginnAfterComingAndBeforeLeavingTime_True() {
+    public void pauseBeginnAfterComingTimeBeforeEndePauseAndBeforeLeavingTime_False() {
         String currentDate = "12-03-2020";
         String comingTime = "18:00";
         String beginnPause = "18:30";
+        String endePause = "18:35";
         String leavingTime = "18:40";
-        boolean result = DateTimeOperationsProvider.isBeginnPauseBetweenComingAndLeavingTime(currentDate,comingTime,leavingTime,beginnPause);
-        MatcherAssert.assertThat(result,Matchers.is(true));
-    }
-
-    @Test
-    public void pauseBeginnJustAfterComingAndBeforeLeavingTime_True() {
-        String currentDate = "12-03-2020";
-        String comingTime = "18:00";
-        String beginnPause = "18:01";
-        String leavingTime = "18:40";
-        boolean result = DateTimeOperationsProvider.isBeginnPauseBetweenComingAndLeavingTime(currentDate,comingTime,leavingTime,beginnPause);
-        MatcherAssert.assertThat(result,Matchers.is(true));
-    }
-
-    @Test
-    public void pauseBeginnAfterLeavingTime_False() {
-        String currentDate = "12-03-2020";
-        String comingTime = "18:00";
-        String beginnPause = "19:00";
-        String leavingTime = "18:40";
-        boolean result = DateTimeOperationsProvider.isBeginnPauseBetweenComingAndLeavingTime(currentDate,comingTime,leavingTime,beginnPause);
+        boolean result = DateTimeOperationsProvider.isBeginnPausePailas(currentDate,comingTime,leavingTime,beginnPause, endePause);
         MatcherAssert.assertThat(result,Matchers.is(false));
     }
 
     @Test
-    public void pauseBeginnAfterComingTimeAndJustBeforeLeavingTime_False() {
+    public void pauseBeginnBeforeComingTime_True() {
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "17:00";
+        String endePause = "18:35";
+        String leavingTime = "18:40";
+        boolean result = DateTimeOperationsProvider.isBeginnPausePailas(currentDate,comingTime,leavingTime,beginnPause, endePause);
+        MatcherAssert.assertThat(result,Matchers.is(true));
+    }
+
+    @Test
+    public void pauseBeginnJustBeforeComingTime_True() {
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "17:59";
+        String endePause = "18:35";
+        String leavingTime = "18:40";
+        boolean result = DateTimeOperationsProvider.isBeginnPausePailas(currentDate,comingTime,leavingTime,beginnPause, endePause);
+        MatcherAssert.assertThat(result,Matchers.is(true));
+    }
+
+    @Test
+    public void pauseBeginnTheSameAsComingTime_True() {
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "18:00";
+        String endePause = "18:35";
+        String leavingTime = "18:40";
+        boolean result = DateTimeOperationsProvider.isBeginnPausePailas(currentDate,comingTime,leavingTime,beginnPause, endePause);
+        MatcherAssert.assertThat(result,Matchers.is(true));
+    }
+
+    @Test
+    public void pauseBeginnJustAfterComingTimeBeforeEndePauseBeforeLeavingTime_False() {
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "18:01";
+        String endePause = "18:35";
+        String leavingTime = "18:40";
+        boolean result = DateTimeOperationsProvider.isBeginnPausePailas(currentDate,comingTime,leavingTime,beginnPause, endePause);
+        MatcherAssert.assertThat(result,Matchers.is(false));
+    }
+
+    @Test
+    public void pauseBeginnAfterComingTimeJustBeforeEndePauseBeforeLeavingTime_False() {
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "18:34";
+        String endePause = "18:35";
+        String leavingTime = "18:40";
+        boolean result = DateTimeOperationsProvider.isBeginnPausePailas(currentDate,comingTime,leavingTime,beginnPause, endePause);
+        MatcherAssert.assertThat(result,Matchers.is(false));
+    }
+
+    @Test
+    public void pauseBeginnAfterComingTimeAtTheSameTimeAsEndePauseBeforeLeavingTime_True() {
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "18:35";
+        String endePause = "18:35";
+        String leavingTime = "18:40";
+        boolean result = DateTimeOperationsProvider.isBeginnPausePailas(currentDate,comingTime,leavingTime,beginnPause, endePause);
+        MatcherAssert.assertThat(result,Matchers.is(true));
+    }
+
+    @Test
+    public void pauseBeginnAfterComingTimeJustAfterEndePauseBeforeLeavingTime_True() {
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "18:36";
+        String endePause = "18:35";
+        String leavingTime = "18:40";
+        boolean result = DateTimeOperationsProvider.isBeginnPausePailas(currentDate,comingTime,leavingTime,beginnPause, endePause);
+        MatcherAssert.assertThat(result,Matchers.is(true));
+    }
+
+    @Test
+    public void pauseBeginnAfterComingTimeAfterEndePauseBeforeLeavingTime_True() {
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "18:38";
+        String endePause = "18:35";
+        String leavingTime = "18:40";
+        boolean result = DateTimeOperationsProvider.isBeginnPausePailas(currentDate,comingTime,leavingTime,beginnPause, endePause);
+        MatcherAssert.assertThat(result,Matchers.is(true));
+    }
+
+    @Test
+    public void pauseBeginnAfterComingTimeAfterEndePauseJustBeforeLeavingTime_True() {
         String currentDate = "12-03-2020";
         String comingTime = "18:00";
         String beginnPause = "18:39";
+        String endePause = "18:35";
         String leavingTime = "18:40";
-        boolean result = DateTimeOperationsProvider.isBeginnPauseBetweenComingAndLeavingTime(currentDate,comingTime,leavingTime,beginnPause);
+        boolean result = DateTimeOperationsProvider.isBeginnPausePailas(currentDate,comingTime,leavingTime,beginnPause, endePause);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
     @Test
-    public void pauseBeginnAtTheSameTimeAsComingTime_False() {
+    public void pauseBeginnAfterComingTimeAfterEndePauseAtTheSameTimeLeavingTime_True() {
         String currentDate = "12-03-2020";
         String comingTime = "18:00";
-        String beginnPause = "18:00";
+        String beginnPause = "18:40";
+        String endePause = "18:35";
         String leavingTime = "18:40";
-        boolean result = DateTimeOperationsProvider.isBeginnPauseBetweenComingAndLeavingTime(currentDate,comingTime,leavingTime,beginnPause);
-        MatcherAssert.assertThat(result,Matchers.is(false));
+        boolean result = DateTimeOperationsProvider.isBeginnPausePailas(currentDate,comingTime,leavingTime,beginnPause, endePause);
+        MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
     @Test
-    public void pauseBeginnJustAfterLeavingTime_False() {
+    public void pauseBeginnAfterComingTimeAfterEndePauseJustAfterLeavingTime_True() {
         String currentDate = "12-03-2020";
         String comingTime = "18:00";
         String beginnPause = "18:41";
+        String endePause = "18:35";
         String leavingTime = "18:40";
-        boolean result = DateTimeOperationsProvider.isBeginnPauseBetweenComingAndLeavingTime(currentDate,comingTime,leavingTime,beginnPause);
-        MatcherAssert.assertThat(result,Matchers.is(false));
-    }
-
-    @Test
-    public void pauseBeginnBeforeComingTime_False() {
-        String currentDate = "12-03-2020";
-        String comingTime = "18:00";
-        String beginnPause = "17:00";
-        String leavingTime = "18:40";
-        boolean result = DateTimeOperationsProvider.isBeginnPauseBetweenComingAndLeavingTime(currentDate,comingTime,leavingTime,beginnPause);
-        MatcherAssert.assertThat(result,Matchers.is(false));
-    }
-
-    @Test
-    public void pauseBeginnJustBeforeComingTime_False() {
-        String currentDate = "12-03-2020";
-        String comingTime = "18:00";
-        String beginnPause = "17:59";
-        String leavingTime = "18:40";
-        boolean result = DateTimeOperationsProvider.isBeginnPauseBetweenComingAndLeavingTime(currentDate,comingTime,leavingTime,beginnPause);
-        MatcherAssert.assertThat(result,Matchers.is(false));
-    }
-
-    @Test
-    public void pauseBeginnBeforeComingTimeNullLeavingTime_False(){
-        String currentDate = "12-03-2020";
-        String comingTime = "18:00";
-        String beginnPause = "17:00";
-        boolean result = DateTimeOperationsProvider.isBeginnPauseBeforeComingTime(currentDate,comingTime,beginnPause);
+        boolean result = DateTimeOperationsProvider.isBeginnPausePailas(currentDate,comingTime,leavingTime,beginnPause, endePause);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
     @Test
-    public void pauseBeginnJustBeforeComingTimeNullLeavingTime_True(){
+    public void pauseBeginnAfterComingTimeAfterEndePauseAfterLeavingTime_True() {
         String currentDate = "12-03-2020";
         String comingTime = "18:00";
-        String beginnPause = "17:59";
-        boolean result = DateTimeOperationsProvider.isBeginnPauseBeforeComingTime(currentDate,comingTime,beginnPause);
+        String beginnPause = "19:00";
+        String endePause = "18:35";
+        String leavingTime = "18:40";
+        boolean result = DateTimeOperationsProvider.isBeginnPausePailas(currentDate,comingTime,leavingTime,beginnPause, endePause);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
     @Test
-    public void pauseBeginnAtTheSameTimeAsComingTimeNullLeavingTime_False(){
+    public void pauseBeginnBeforeComingTimeAndBeforeEndePauseNullLeavingTime_True(){
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "17:00";
+        String endePause = "18:35";
+        boolean result = DateTimeOperationsProvider.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,comingTime,beginnPause,endePause);
+        MatcherAssert.assertThat(result,Matchers.is(true));
+    }
+
+    @Test
+    public void pauseBeginnJustBeforeComingTimeAndBeforeEndePauseNullLeavingTime_True(){
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "17:59";
+        String endePause = "18:35";
+        boolean result = DateTimeOperationsProvider.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,comingTime,beginnPause,endePause);
+        MatcherAssert.assertThat(result,Matchers.is(true));
+    }
+
+    @Test
+    public void pauseBeginnAtTheSameTimeAsComingTimeBeforeEndePauseNullLeavingTime_True(){
         String currentDate = "12-03-2020";
         String comingTime = "18:00";
         String beginnPause = "18:00";
-        boolean result = DateTimeOperationsProvider.isBeginnPauseBeforeComingTime(currentDate,comingTime,beginnPause);
-        MatcherAssert.assertThat(result,Matchers.is(false));
+        String endePause = "18:35";
+        boolean result = DateTimeOperationsProvider.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,comingTime,beginnPause,endePause);
+        MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
     @Test
-    public void pauseBeginnJustAfterComingTimeNullLeavingTime_False(){
+    public void pauseBeginnJustAfterComingTimeBeforeEndePauseNullLeavingTime_False(){
         String currentDate = "12-03-2020";
         String comingTime = "18:00";
         String beginnPause = "18:01";
-        boolean result = DateTimeOperationsProvider.isBeginnPauseBeforeComingTime(currentDate,comingTime,beginnPause);
+        String endePause = "18:35";
+        boolean result = DateTimeOperationsProvider.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,comingTime,beginnPause,endePause);
         MatcherAssert.assertThat(result,Matchers.is(false));
     }
 
     @Test
-    public void pauseBeginnAfterComingTimeNullLeavingTime_False(){
+    public void pauseBeginnAfterComingTimeBeforeEndePauseNullLeavingTime_False(){
         String currentDate = "12-03-2020";
         String comingTime = "18:00";
         String beginnPause = "18:30";
-        boolean result = DateTimeOperationsProvider.isBeginnPauseBeforeComingTime(currentDate,comingTime,beginnPause);
+        String endePause = "18:35";
+        boolean result = DateTimeOperationsProvider.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,comingTime,beginnPause,endePause);
         MatcherAssert.assertThat(result,Matchers.is(false));
+    }
+
+    @Test
+    public void pauseBeginnAfterComingTimeJustBeforeEndePauseNullLeavingTime_False(){
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "18:34";
+        String endePause = "18:35";
+        boolean result = DateTimeOperationsProvider.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,comingTime,beginnPause,endePause);
+        MatcherAssert.assertThat(result,Matchers.is(false));
+    }
+
+    @Test
+    public void pauseBeginnAfterComingTimeTheSameAsEndePauseNullLeavingTime_True(){
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "18:35";
+        String endePause = "18:35";
+        boolean result = DateTimeOperationsProvider.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,comingTime,beginnPause,endePause);
+        MatcherAssert.assertThat(result,Matchers.is(true));
+    }
+
+    @Test
+    public void pauseBeginnAfterComingTimeJustAfterEndePauseNullLeavingTime_True(){
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "18:36";
+        String endePause = "18:35";
+        boolean result = DateTimeOperationsProvider.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,comingTime,beginnPause,endePause);
+        MatcherAssert.assertThat(result,Matchers.is(true));
+    }
+
+    @Test
+    public void pauseBeginnAfterComingTimeAfterEndePauseNullLeavingTime_True(){
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "19:00";
+        String endePause = "18:35";
+        boolean result = DateTimeOperationsProvider.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,comingTime,beginnPause,endePause);
+        MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
     @Test

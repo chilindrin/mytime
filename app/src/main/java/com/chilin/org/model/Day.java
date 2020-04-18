@@ -11,5 +11,6 @@ public class Day {
     private String comingTime;
     private String leavingTime;
     private String beginnPause;
+    private String endePause;
 
 }
