@@ -101,6 +101,26 @@ public class DBWriterTest {
         cleanData(currentDate);
     }
 
+    @Test
+    public void createComingTime_test_test(){
+        // Given
+        String currentDate = "24-12-2020";
+        cleanData(currentDate);
+
+        Day registeredDay = dbReader.getRegisteredDay(currentDate);
+        MatcherAssert.assertThat(registeredDay,CoreMatchers.is(CoreMatchers.nullValue()));
+
+        // When
+        String comingTime = "09:10";
+        sut.createComingTime(currentDate,comingTime);
+
+        Day registeredDayAfter = dbReader.getRegisteredDay(currentDate);
+        MatcherAssert.assertThat(registeredDayAfter,CoreMatchers.is(CoreMatchers.notNullValue()));
+        MatcherAssert.assertThat(registeredDayAfter.getComingTime(),CoreMatchers.is(comingTime));
+
+        cleanData(currentDate);
+    }
+
     private void cleanData(String currentDate){
         sut.deleteInfo(currentDate);
     }

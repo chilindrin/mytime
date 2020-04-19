@@ -50,7 +50,8 @@ public class DBReader {
         String[] selectColumns = { TimeDBSchema.DayEntry.COLUMN_NAME_DATE,
                 TimeDBSchema.DayEntry.COLUMN_NAME_COMMING,
                 TimeDBSchema.DayEntry.COLUMN_NAME_LEAVING,
-        TimeDBSchema.DayEntry.COLUMN_NAME_BEGINN_PAUSE};
+        TimeDBSchema.DayEntry.COLUMN_NAME_BEGINN_PAUSE,
+        TimeDBSchema.DayEntry.COLUMN_NAME_ENDE_PAUSE};
 
         String whereColumns = TimeDBSchema.DayEntry.COLUMN_NAME_DATE + " = ?";
         String[] whereValues = { currentDate };
@@ -86,6 +87,8 @@ public class DBReader {
                     resultFromDB.getColumnIndexOrThrow(TimeDBSchema.DayEntry.COLUMN_NAME_LEAVING)));
             result.setBeginnPause(resultFromDB.getString(
                     resultFromDB.getColumnIndexOrThrow(TimeDBSchema.DayEntry.COLUMN_NAME_BEGINN_PAUSE)));
+            result.setEndePause(resultFromDB.getString(
+                    resultFromDB.getColumnIndexOrThrow(TimeDBSchema.DayEntry.COLUMN_NAME_ENDE_PAUSE)));
         }
         return result;
     }

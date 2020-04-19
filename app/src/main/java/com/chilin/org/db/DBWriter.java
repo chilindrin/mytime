@@ -56,7 +56,7 @@ public class DBWriter {
                 values,whereColumns,whereValues);
     }
 
-    public void  createComingTime(String currentDate,String comingTime) {
+    public void createComingTime(String currentDate,String comingTime) {
         ContentValues values = new ContentValues();
         values.put(TimeDBSchema.DayEntry.COLUMN_NAME_DATE, currentDate);
         values.put(TimeDBSchema.DayEntry.COLUMN_NAME_COMMING, comingTime);

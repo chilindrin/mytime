@@ -90,12 +90,7 @@ public class InsertTime extends AppCompatActivity {
     private void saveComingTime() {
         try {
             String friendlyCurrentDateMainDisplay = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
-            TextView hoursView = findViewById(R.id.hourTextView);
-            String selectedHours = (String) hoursView.getText();
-            TextView minutesView = findViewById(R.id.minuteTextView);
-            String selectedMinutes = (String) minutesView.getText();
-            String comingTime = TextProcessor.getTime(Integer.parseInt(selectedHours),Integer.parseInt(selectedMinutes));
-            timeRegister.saveComingTime(friendlyCurrentDateMainDisplay,comingTime);
+            timeRegister.saveComingTime(friendlyCurrentDateMainDisplay,getTimeToBook());
         } catch (MyTimeException ex){
             new AdviceUser().showBeginnPauseAfterLeavingTime(this,ex.getMessage());
         }
@@ -105,15 +100,19 @@ public class InsertTime extends AppCompatActivity {
     private void saveBeginnPause() {
         try {
             String friendlyCurrentDateMainDisplay = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
-            TextView hoursView = findViewById(R.id.hourTextView);
-            String selectedHours = (String) hoursView.getText();
-            TextView minutesView = findViewById(R.id.minuteTextView);
-            String selectedMinutes = (String) minutesView.getText();
-            String beginnPause = TextProcessor.getTime(Integer.parseInt(selectedHours),Integer.parseInt(selectedMinutes));
-            timeRegister.saveBeginnPause(friendlyCurrentDateMainDisplay,beginnPause);
+            timeRegister.saveBeginnPause(friendlyCurrentDateMainDisplay,getTimeToBook());
         } catch (MyTimeException ex){
             new AdviceUser().showBeginnPauseAfterLeavingTime(this,ex.getMessage());
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private String getTimeToBook(){
+        TextView hoursView = findViewById(R.id.hourTextView);
+        String selectedHours = (String) hoursView.getText();
+        TextView minutesView = findViewById(R.id.minuteTextView);
+        String selectedMinutes = (String) minutesView.getText();
+        return TextProcessor.getTime(Integer.parseInt(selectedHours),Integer.parseInt(selectedMinutes));
     }
 
 }
