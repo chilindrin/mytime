@@ -155,7 +155,7 @@ public class IntervalValidatorTest {
         String comingTime = "18:00";
         String beginnPause = "17:00";
         String endePause = "18:35";
-        boolean result = IntervalValidator.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,beginnPause,comingTime,endePause);
+        boolean result = IntervalValidator.isGivenTimeNotBetweenFirstTimeAndLastTime(currentDate,beginnPause,comingTime,endePause);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
@@ -165,7 +165,7 @@ public class IntervalValidatorTest {
         String comingTime = "18:00";
         String beginnPause = "17:59";
         String endePause = "18:35";
-        boolean result = IntervalValidator.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,beginnPause,comingTime,endePause);
+        boolean result = IntervalValidator.isGivenTimeNotBetweenFirstTimeAndLastTime(currentDate,beginnPause,comingTime,endePause);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
@@ -175,7 +175,7 @@ public class IntervalValidatorTest {
         String comingTime = "18:00";
         String beginnPause = "18:00";
         String endePause = "18:35";
-        boolean result = IntervalValidator.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,comingTime,beginnPause,endePause);
+        boolean result = IntervalValidator.isGivenTimeNotBetweenFirstTimeAndLastTime(currentDate,comingTime,beginnPause,endePause);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
@@ -185,7 +185,7 @@ public class IntervalValidatorTest {
         String comingTime = "18:00";
         String beginnPause = "18:01";
         String endePause = "18:35";
-        boolean result = IntervalValidator.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,beginnPause,comingTime,endePause);
+        boolean result = IntervalValidator.isGivenTimeNotBetweenFirstTimeAndLastTime(currentDate,beginnPause,comingTime,endePause);
         MatcherAssert.assertThat(result,Matchers.is(false));
     }
 
@@ -195,7 +195,7 @@ public class IntervalValidatorTest {
         String comingTime = "18:00";
         String beginnPause = "18:30";
         String endePause = "18:35";
-        boolean result = IntervalValidator.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,beginnPause,comingTime,endePause);
+        boolean result = IntervalValidator.isGivenTimeNotBetweenFirstTimeAndLastTime(currentDate,beginnPause,comingTime,endePause);
         MatcherAssert.assertThat(result,Matchers.is(false));
     }
 
@@ -205,7 +205,7 @@ public class IntervalValidatorTest {
         String comingTime = "18:00";
         String beginnPause = "18:34";
         String endePause = "18:35";
-        boolean result = IntervalValidator.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,beginnPause,comingTime,endePause);
+        boolean result = IntervalValidator.isGivenTimeNotBetweenFirstTimeAndLastTime(currentDate,beginnPause,comingTime,endePause);
         MatcherAssert.assertThat(result,Matchers.is(false));
     }
 
@@ -215,7 +215,7 @@ public class IntervalValidatorTest {
         String comingTime = "18:00";
         String beginnPause = "18:35";
         String endePause = "18:35";
-        boolean result = IntervalValidator.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,comingTime,beginnPause,endePause);
+        boolean result = IntervalValidator.isGivenTimeNotBetweenFirstTimeAndLastTime(currentDate,comingTime,beginnPause,endePause);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
@@ -225,7 +225,7 @@ public class IntervalValidatorTest {
         String comingTime = "18:00";
         String beginnPause = "18:36";
         String endePause = "18:35";
-        boolean result = IntervalValidator.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,comingTime,beginnPause,endePause);
+        boolean result = IntervalValidator.isGivenTimeNotBetweenFirstTimeAndLastTime(currentDate,comingTime,beginnPause,endePause);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
@@ -235,7 +235,7 @@ public class IntervalValidatorTest {
         String comingTime = "18:00";
         String beginnPause = "19:00";
         String endePause = "18:35";
-        boolean result = IntervalValidator.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate,comingTime,beginnPause,endePause);
+        boolean result = IntervalValidator.isGivenTimeNotBetweenFirstTimeAndLastTime(currentDate,comingTime,beginnPause,endePause);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
@@ -245,7 +245,7 @@ public class IntervalValidatorTest {
         String beginnPause = "18:00";
         String endePause = "18:35";
         String leavingTime = "19:00";
-        boolean result = IntervalValidator.isBeginnPauseNotBeforeEndePauseAndNotBeforeLeavingTime(currentDate,beginnPause,endePause,leavingTime);
+        boolean result = IntervalValidator.isFirstTimeNotBeforeOtherOneAndNotBeforeLastOne(currentDate,beginnPause,endePause,leavingTime);
         MatcherAssert.assertThat(result,Matchers.is(false));
     }
 
@@ -255,7 +255,7 @@ public class IntervalValidatorTest {
         String beginnPause = "18:34";
         String endePause = "18:35";
         String leavingTime = "19:00";
-        boolean result = IntervalValidator.isBeginnPauseNotBeforeEndePauseAndNotBeforeLeavingTime(currentDate,beginnPause,endePause,leavingTime);
+        boolean result = IntervalValidator.isFirstTimeNotBeforeOtherOneAndNotBeforeLastOne(currentDate,beginnPause,endePause,leavingTime);
         MatcherAssert.assertThat(result,Matchers.is(false));
     }
 
@@ -265,7 +265,7 @@ public class IntervalValidatorTest {
         String beginnPause = "18:35";
         String endePause = "18:35";
         String leavingTime = "19:00";
-        boolean result = IntervalValidator.isBeginnPauseNotBeforeEndePauseAndNotBeforeLeavingTime(currentDate,beginnPause,endePause,leavingTime);
+        boolean result = IntervalValidator.isFirstTimeNotBeforeOtherOneAndNotBeforeLastOne(currentDate,beginnPause,endePause,leavingTime);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
@@ -275,7 +275,7 @@ public class IntervalValidatorTest {
         String beginnPause = "18:36";
         String endePause = "18:35";
         String leavingTime = "19:00";
-        boolean result = IntervalValidator.isBeginnPauseNotBeforeEndePauseAndNotBeforeLeavingTime(currentDate,beginnPause,endePause,leavingTime);
+        boolean result = IntervalValidator.isFirstTimeNotBeforeOtherOneAndNotBeforeLastOne(currentDate,beginnPause,endePause,leavingTime);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
@@ -285,7 +285,7 @@ public class IntervalValidatorTest {
         String beginnPause = "18:45";
         String endePause = "18:35";
         String leavingTime = "19:00";
-        boolean result = IntervalValidator.isBeginnPauseNotBeforeEndePauseAndNotBeforeLeavingTime(currentDate,beginnPause,endePause,leavingTime);
+        boolean result = IntervalValidator.isFirstTimeNotBeforeOtherOneAndNotBeforeLastOne(currentDate,beginnPause,endePause,leavingTime);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
@@ -295,7 +295,7 @@ public class IntervalValidatorTest {
         String beginnPause = "18:59";
         String endePause = "18:35";
         String leavingTime = "19:00";
-        boolean result = IntervalValidator.isBeginnPauseNotBeforeEndePauseAndNotBeforeLeavingTime(currentDate,beginnPause,endePause,leavingTime);
+        boolean result = IntervalValidator.isFirstTimeNotBeforeOtherOneAndNotBeforeLastOne(currentDate,beginnPause,endePause,leavingTime);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
@@ -305,7 +305,7 @@ public class IntervalValidatorTest {
         String beginnPause = "19:00";
         String endePause = "18:35";
         String leavingTime = "19:00";
-        boolean result = IntervalValidator.isBeginnPauseNotBeforeEndePauseAndNotBeforeLeavingTime(currentDate,beginnPause,endePause,leavingTime);
+        boolean result = IntervalValidator.isFirstTimeNotBeforeOtherOneAndNotBeforeLastOne(currentDate,beginnPause,endePause,leavingTime);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
@@ -360,7 +360,7 @@ public class IntervalValidatorTest {
         String beginnPause = "19:01";
         String endePause = "18:35";
         String leavingTime = "19:00";
-        boolean result = IntervalValidator.isBeginnPauseNotBeforeEndePauseAndNotBeforeLeavingTime(currentDate,beginnPause,endePause,leavingTime);
+        boolean result = IntervalValidator.isFirstTimeNotBeforeOtherOneAndNotBeforeLastOne(currentDate,beginnPause,endePause,leavingTime);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
@@ -370,7 +370,7 @@ public class IntervalValidatorTest {
         String beginnPause = "19:45";
         String endePause = "18:35";
         String leavingTime = "19:00";
-        boolean result = IntervalValidator.isBeginnPauseNotBeforeEndePauseAndNotBeforeLeavingTime(currentDate,beginnPause,endePause,leavingTime);
+        boolean result = IntervalValidator.isFirstTimeNotBeforeOtherOneAndNotBeforeLastOne(currentDate,beginnPause,endePause,leavingTime);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
@@ -379,7 +379,7 @@ public class IntervalValidatorTest {
         String currentDate = "12-03-2020";
         String beginnPause = "18:00";
         String endePause = "18:30";
-        boolean result = IntervalValidator.isBeginPauseNotBeforeEndePause(currentDate,beginnPause,endePause);
+        boolean result = IntervalValidator.isFirstTimeNotBeforeLastTime(currentDate,beginnPause,endePause);
         MatcherAssert.assertThat(result,Matchers.is(false));
     }
 
@@ -388,7 +388,7 @@ public class IntervalValidatorTest {
         String currentDate = "12-03-2020";
         String beginnPause = "18:29";
         String endePause = "18:30";
-        boolean result = IntervalValidator.isBeginPauseNotBeforeEndePause(currentDate,beginnPause,endePause);
+        boolean result = IntervalValidator.isFirstTimeNotBeforeLastTime(currentDate,beginnPause,endePause);
         MatcherAssert.assertThat(result,Matchers.is(false));
     }
 
@@ -397,7 +397,7 @@ public class IntervalValidatorTest {
         String currentDate = "12-03-2020";
         String beginnPause = "18:30";
         String endePause = "18:30";
-        boolean result = IntervalValidator.isBeginPauseNotBeforeEndePause(currentDate,beginnPause,endePause);
+        boolean result = IntervalValidator.isFirstTimeNotBeforeLastTime(currentDate,beginnPause,endePause);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
@@ -406,7 +406,7 @@ public class IntervalValidatorTest {
         String currentDate = "12-03-2020";
         String beginnPause = "18:31";
         String endePause = "18:30";
-        boolean result = IntervalValidator.isBeginPauseNotBeforeEndePause(currentDate,beginnPause,endePause);
+        boolean result = IntervalValidator.isFirstTimeNotBeforeLastTime(currentDate,beginnPause,endePause);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
@@ -415,7 +415,7 @@ public class IntervalValidatorTest {
         String currentDate = "12-03-2020";
         String beginnPause = "18:45";
         String endePause = "18:30";
-        boolean result = IntervalValidator.isBeginPauseNotBeforeEndePause(currentDate,beginnPause,endePause);
+        boolean result = IntervalValidator.isFirstTimeNotBeforeLastTime(currentDate,beginnPause,endePause);
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 

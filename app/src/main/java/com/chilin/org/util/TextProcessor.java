@@ -101,10 +101,14 @@ public class TextProcessor {
 
     public static String getTextForOperation(Operation operation){
         switch (operation){
-            case BEGINN_PAUSE:
-                return "Pause ab wann?";
             case COMING:
                 return "Guten morgen!";
+            case BEGINN_PAUSE:
+                return "Pause ab wann?";
+            case ENDE_PAUSE:
+                return "Es geht weiter!";
+            case LEAVING:
+                return "Es reicht mir!";
             default:
                 throw new MyTimeException("The operation you are trying to do does not exist");
         }

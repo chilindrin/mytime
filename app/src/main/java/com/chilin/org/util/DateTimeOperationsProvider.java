@@ -9,14 +9,11 @@ import com.chilin.org.model.Day;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
-import java.util.Date;
 
 public class DateTimeOperationsProvider {
 
@@ -77,21 +74,57 @@ public class DateTimeOperationsProvider {
         return pauseInSeconds / 60;
     }
 
+    public static void validateComingTime(Day registeredDay, String comingTime) {
+        String currentDate = registeredDay.getDayRegistered();
+        String beginnPause = registeredDay.getBeginnPause();
+        String endePause = registeredDay.getEndePause();
+        String leavingTime = registeredDay.getLeavingTime();
+        if (BinaryConditions.condition001(beginnPause, endePause, leavingTime)) {
+            if (IntervalValidator.isFirstTimeNotBeforeLastTime(currentDate, comingTime, leavingTime)) {
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
+        } else if (BinaryConditions.condition010(beginnPause, endePause, leavingTime)) {
+            if (IntervalValidator.isFirstTimeNotBeforeLastTime(currentDate, comingTime, endePause)) {
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
+        } else if (BinaryConditions.condition011(beginnPause, endePause, leavingTime)) {
+            if (IntervalValidator.isFirstTimeNotBeforeOtherOneAndNotBeforeLastOne(currentDate,comingTime,endePause,leavingTime)){
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
+        } else if (BinaryConditions.condition100(beginnPause, endePause, leavingTime)) {
+            if (IntervalValidator.isFirstTimeNotBeforeLastTime(currentDate, comingTime, beginnPause)) {
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
+        } else if (BinaryConditions.condition101(beginnPause, endePause, leavingTime)) {
+            if (IntervalValidator.isFirstTimeNotBeforeOtherOneAndNotBeforeLastOne(currentDate,comingTime,beginnPause,leavingTime)){
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
+        } else if (BinaryConditions.condition110(beginnPause, endePause, leavingTime)) {
+            if (IntervalValidator.isFirstTimeNotBeforeOtherOneAndNotBeforeLastOne(currentDate,comingTime,beginnPause,endePause)){
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
+        } else if (BinaryConditions.condition111(beginnPause, endePause, leavingTime)) {
+            if (IntervalValidator.isFirstTimeNotBeforeTheOtherOnes(currentDate,comingTime,beginnPause,endePause,leavingTime)){
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
+        }
+    }
+
     public static void validateBeginnPause(Day registeredDay, String beginnPause) {
         String currentDate = registeredDay.getDayRegistered();
         String comingTime = registeredDay.getComingTime();
         String endePause = registeredDay.getEndePause();
         String leavingTime = registeredDay.getLeavingTime();
         if (BinaryConditions.condition001(comingTime, endePause, leavingTime)) {
-            if (IntervalValidator.isBeginPauseNotBeforeLeavingTime(currentDate, beginnPause, leavingTime)) {
+            if (IntervalValidator.isFirstTimeNotBeforeLastTime(currentDate, beginnPause, leavingTime)) {
                 throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
             }
         } else if (BinaryConditions.condition010(comingTime, endePause, leavingTime)) {
-            if (IntervalValidator.isBeginPauseNotBeforeEndePause(currentDate, beginnPause, endePause)) {
+            if (IntervalValidator.isFirstTimeNotBeforeLastTime(currentDate, beginnPause, endePause)) {
                 throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
             }
         } else if (BinaryConditions.condition011(comingTime, endePause, leavingTime)) {
-            if (IntervalValidator.isBeginnPauseNotBeforeEndePauseAndNotBeforeLeavingTime(currentDate, beginnPause, endePause, leavingTime)) {
+            if (IntervalValidator.isFirstTimeNotBeforeOtherOneAndNotBeforeLastOne(currentDate, beginnPause, endePause, leavingTime)) {
                 throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
             }
         } else if (BinaryConditions.condition100(comingTime, endePause, leavingTime)) {
@@ -99,11 +132,11 @@ public class DateTimeOperationsProvider {
                 throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
             }
         } else if (BinaryConditions.condition101(comingTime, endePause, leavingTime)) {
-            if (IntervalValidator.isBeginnPauseNotBetweenComingAndLeavingTime(currentDate, beginnPause, comingTime,leavingTime)) {
+            if (IntervalValidator.isGivenTimeNotBetweenFirstTimeAndLastTime(currentDate, beginnPause, comingTime,leavingTime)) {
                 throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
             }
         } else if (BinaryConditions.condition110(comingTime, endePause, leavingTime)) {
-            if (IntervalValidator.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate, beginnPause, comingTime, endePause)) {
+            if (IntervalValidator.isGivenTimeNotBetweenFirstTimeAndLastTime(currentDate, beginnPause, comingTime, endePause)) {
                 throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
             }
         } else if (BinaryConditions.condition111(comingTime, endePause, leavingTime)) {
@@ -113,41 +146,47 @@ public class DateTimeOperationsProvider {
         }
     }
 
-    public static void validateComingTime(Day registeredDay, String comingTime) {
+    public static void validateEndePause(Day registeredDay, String endePause) {
         String currentDate = registeredDay.getDayRegistered();
+        String comingTime = registeredDay.getComingTime();
         String beginnPause = registeredDay.getBeginnPause();
-        String endePause = registeredDay.getEndePause();
         String leavingTime = registeredDay.getLeavingTime();
-        if (BinaryConditions.condition001(beginnPause, endePause, leavingTime)) {
-            if (IntervalValidator.isBeginPauseNotBeforeLeavingTime(currentDate, comingTime, leavingTime)) {
-                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
-            }
-        } else if (BinaryConditions.condition010(beginnPause, endePause, leavingTime)) {
-            if (IntervalValidator.isBeginPauseNotBeforeEndePause(currentDate, comingTime, endePause)) {
-                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
-            }
-        } else if (BinaryConditions.condition011(beginnPause, endePause, leavingTime)) {
-            if (IntervalValidator.isBeginnPauseNotBeforeEndePauseAndNotBeforeLeavingTime(currentDate, comingTime, endePause, leavingTime)) {
-                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
-            }
-        } else if (BinaryConditions.condition100(beginnPause, endePause, leavingTime)) {
-            if (IntervalValidator.isBeginnPauseNotAfterComingTime(currentDate, comingTime, comingTime)) {
-                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
-            }
-        } else if (BinaryConditions.condition101(beginnPause, endePause, leavingTime)) {
-            if (IntervalValidator.isBeginnPauseNotBetweenComingAndLeavingTime(currentDate, comingTime, comingTime,leavingTime)) {
-                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
-            }
-        } else if (BinaryConditions.condition110(beginnPause, endePause, leavingTime)) {
-            if (IntervalValidator.isBeginnPauseNotAfterComingTimeNorBeforeEndePause(currentDate, comingTime, comingTime, endePause)) {
-                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
-            }
-        } else if (BinaryConditions.condition111(beginnPause, endePause, leavingTime)) {
-            if (IntervalValidator.isBeginnPausePailas(currentDate, comingTime,comingTime,endePause, leavingTime)) {
-                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
-            }
-        }
+        if (BinaryConditions.condition001(comingTime, beginnPause, leavingTime)) {
 
+        } else if (BinaryConditions.condition010(comingTime, beginnPause, leavingTime)) {
+
+        } else if (BinaryConditions.condition011(comingTime, beginnPause, leavingTime)) {
+
+        } else if (BinaryConditions.condition100(comingTime, beginnPause, leavingTime)) {
+
+        } else if (BinaryConditions.condition101(comingTime, beginnPause, leavingTime)) {
+
+        } else if (BinaryConditions.condition110(comingTime, beginnPause, leavingTime)) {
+
+        } else if (BinaryConditions.condition111(comingTime, beginnPause, leavingTime)) {
+
+        }
     }
 
+    public static void validateLeavingTime(Day registeredDay, String leavingTime) {
+        String currentDate = registeredDay.getDayRegistered();
+        String comingTime = registeredDay.getComingTime();
+        String beginnPause = registeredDay.getBeginnPause();
+        String endePause = registeredDay.getEndePause();
+        if (BinaryConditions.condition001(comingTime, beginnPause, endePause)) {
+
+        } else if (BinaryConditions.condition010(comingTime, beginnPause, endePause)) {
+
+        } else if (BinaryConditions.condition011(comingTime, beginnPause, endePause)) {
+
+        } else if (BinaryConditions.condition100(comingTime, beginnPause, endePause)) {
+
+        } else if (BinaryConditions.condition101(comingTime, beginnPause, endePause)) {
+
+        } else if (BinaryConditions.condition110(comingTime, beginnPause, endePause)) {
+
+        } else if (BinaryConditions.condition111(comingTime, beginnPause, endePause)) {
+
+        }
+    }
 }

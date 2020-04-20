@@ -70,15 +70,9 @@ public class MainActivity extends AppCompatActivity {
         currentDateTextView.setText(DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDate));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void saveLeavingTime(View view) {
-        if (DateTimeOperationsProvider.isWeekend(this.currentDate)){
-            new AdviceUser().showSorryWeekend(view.getContext());
-        } else {
-            TextView textViewCurrentDate = findViewById(R.id.currentDateTextView);
-            String currentDate = (String) textViewCurrentDate.getText();
-            timeRegister.saveLeavingTime(currentDate);
-        }
+    public void createReport(View view){
+        Intent intent = new Intent(this, ReportCreatorActivity.class);
+        startActivity(intent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -91,11 +85,6 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(OPERATION, Operation.COMING);
             startActivity(intent);
         }
-    }
-
-    public void createReport(View view){
-        Intent intent = new Intent(this, ReportCreatorActivity.class);
-        startActivity(intent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -115,9 +104,22 @@ public class MainActivity extends AppCompatActivity {
         if (DateTimeOperationsProvider.isWeekend(this.currentDate)){
             new AdviceUser().showSorryWeekend(view.getContext());
         } else {
-            TextView textViewCurrentDate = findViewById(R.id.currentDateTextView);
-            String currentDate = (String) textViewCurrentDate.getText();
-            timeRegister.saveEndePause(currentDate);
+            Intent intent = new Intent(this, InsertTime.class);
+            intent.putExtra(CURENT_DATE_OBJEKT,this.currentDate);
+            intent.putExtra(OPERATION, Operation.ENDE_PAUSE);
+            startActivity(intent);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void saveLeavingTime(View view) {
+        if (DateTimeOperationsProvider.isWeekend(this.currentDate)){
+            new AdviceUser().showSorryWeekend(view.getContext());
+        } else {
+            Intent intent = new Intent(this, InsertTime.class);
+            intent.putExtra(CURENT_DATE_OBJEKT,this.currentDate);
+            intent.putExtra(OPERATION, Operation.LEAVING);
+            startActivity(intent);
         }
     }
 

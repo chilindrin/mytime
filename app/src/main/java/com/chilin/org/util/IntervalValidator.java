@@ -6,55 +6,11 @@ import java.util.Date;
 
 public class IntervalValidator {
 
-    public static boolean isBeginPauseNotBeforeLeavingTime(String currentDate, String beginnPause, String leavingTime) {
-        Date beginnPauseComlete = createDateForTime(currentDate, beginnPause);
-        Date leavingTimeComplete = createDateForTime(currentDate, leavingTime);
-        return beginnPauseComlete.equals(leavingTimeComplete) ||
-                beginnPauseComlete.after(leavingTimeComplete);
-    }
-
-    public static boolean isBeginPauseNotBeforeEndePause(String currentDate, String beginnPause, String endePause) {
-        Date beginnPauseComlete = createDateForTime(currentDate, beginnPause);
-        Date endePauseComplete = createDateForTime(currentDate, endePause);
-        return beginnPauseComlete.equals(endePauseComplete) ||
-                beginnPauseComlete.after(endePauseComplete);
-    }
-
-    public static boolean isBeginnPauseNotBeforeEndePauseAndNotBeforeLeavingTime(String currentDate, String beginnPause, String endePause, String leavingTime) {
-        Date beginnPauseComlete = createDateForTime(currentDate, beginnPause);
-        Date endePauseComplete = createDateForTime(currentDate, endePause);
-        Date leavingTimeComplete = createDateForTime(currentDate,leavingTime);
-        return beginnPauseComlete.after(endePauseComplete) ||
-                beginnPauseComlete.equals(endePauseComplete) ||
-                beginnPauseComlete.equals(leavingTimeComplete) ||
-                beginnPauseComlete.after(leavingTimeComplete);
-    }
-
     public static boolean isBeginnPauseNotAfterComingTime(String currentDate, String beginnPause, String comingTime) {
         Date beginnPauseComlete = createDateForTime(currentDate, beginnPause);
         Date comingTimeComplete = createDateForTime(currentDate, comingTime);
         return beginnPauseComlete.equals(comingTimeComplete) ||
                 beginnPauseComlete.before(comingTimeComplete);
-    }
-
-    public static boolean isBeginnPauseNotBetweenComingAndLeavingTime(String currentDate, String beginnPause, String comingTime, String leavingTime) {
-        Date comingTimeComplete = createDateForTime(currentDate, comingTime);
-        Date beginnPauseComplete = createDateForTime(currentDate, beginnPause);
-        Date leavingTimeComplete = createDateForTime(currentDate,leavingTime);
-        return beginnPauseComplete.before(comingTimeComplete) ||
-                beginnPauseComplete.equals(comingTimeComplete) ||
-                beginnPauseComplete.equals(leavingTimeComplete) ||
-                beginnPauseComplete.after(leavingTimeComplete);
-    }
-
-    public static boolean isBeginnPauseNotAfterComingTimeNorBeforeEndePause(String currentDate, String beginnPause, String comingTime, String endePause) {
-        Date comingTimeComplete = createDateForTime(currentDate, comingTime);
-        Date beginnPauseComlete = createDateForTime(currentDate, beginnPause);
-        Date endePauseComplete = createDateForTime(currentDate,endePause);
-        return beginnPauseComlete.before(comingTimeComplete) ||
-                beginnPauseComlete.equals(comingTimeComplete) ||
-                beginnPauseComlete.equals(endePauseComplete) ||
-                beginnPauseComlete.after(endePauseComplete);
     }
 
     public static boolean isBeginnPausePailas(String currentDate, String beginnPause,String comingTime, String endePause,String leavingTime) {
@@ -81,4 +37,43 @@ public class IntervalValidator {
         return dateForTime;
     }
 
+    public static boolean isFirstTimeNotBeforeLastTime(String currentDate, String firstTime, String lastTime) {
+        Date firstTimeComlete = createDateForTime(currentDate, firstTime);
+        Date lastTimeComplete = createDateForTime(currentDate, lastTime);
+        return firstTimeComlete.equals(lastTimeComplete) ||
+                firstTimeComlete.after(lastTimeComplete);
+    }
+
+    public static boolean isFirstTimeNotBeforeOtherOneAndNotBeforeLastOne(String currentDate, String firstTime, String otherOne, String lastOne) {
+        Date firstTimeComlete = createDateForTime(currentDate, firstTime);
+        Date otherOneComplete = createDateForTime(currentDate, otherOne);
+        Date lastOneComplete = createDateForTime(currentDate,lastOne);
+        return firstTimeComlete.after(otherOneComplete) ||
+                firstTimeComlete.equals(otherOneComplete) ||
+                firstTimeComlete.equals(lastOneComplete) ||
+                firstTimeComlete.after(lastOneComplete);
+    }
+
+    public static boolean isFirstTimeNotBeforeTheOtherOnes(String currentDate,String firstTime,String otherTime,String laterTime,String lastTime){
+        Date firstTimeComlete = createDateForTime(currentDate, firstTime);
+        Date otherTimeComplete = createDateForTime(currentDate, otherTime);
+        Date laterTimeComplete = createDateForTime(currentDate,laterTime);
+        Date lastTimeComplete = createDateForTime(currentDate,lastTime);
+        return firstTimeComlete.after(otherTimeComplete) ||
+                firstTimeComlete.equals(otherTimeComplete) ||
+                firstTimeComlete.equals(laterTimeComplete) ||
+                firstTimeComlete.after(laterTimeComplete) ||
+                firstTimeComlete.equals(lastTimeComplete) ||
+                firstTimeComlete.after(lastTimeComplete);
+    }
+
+    public static boolean isGivenTimeNotBetweenFirstTimeAndLastTime(String currentDate,String givenTime,String firstTime,String lastTime){
+        Date firstTimeComplete = createDateForTime(currentDate, firstTime);
+        Date givenTimeComplete = createDateForTime(currentDate, givenTime);
+        Date lastTimeComplete = createDateForTime(currentDate,lastTime);
+        return givenTimeComplete.before(firstTimeComplete) ||
+                givenTimeComplete.equals(firstTimeComplete) ||
+                givenTimeComplete.equals(lastTimeComplete) ||
+                givenTimeComplete.after(lastTimeComplete);
+    }
 }

@@ -19,25 +19,23 @@ public class DBWriter {
         this.dbDealer = new TimeDBDealer(context);
     }
 
-    public void updateLeavingTime(String currentDate) {
+    public void updateLeavingTime(String currentDate, String leavingTime) {
         SQLiteDatabase writableDatabase = dbDealer.getWritableDatabase();
 
         String whereColumns = TimeDBSchema.DayEntry.COLUMN_NAME_DATE + " = ?";
         String[] whereValues = { currentDate };
 
-        Date currentTime = Calendar.getInstance().getTime();
         ContentValues values = new ContentValues();
-        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_LEAVING, FORMATTER.format(currentTime));
+        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_LEAVING, leavingTime);
 
         writableDatabase.update(TABLE_NAME,
                 values,whereColumns,whereValues);
     }
 
-    public void createLeavingTime(String currentDate){
-        Date currentTime = Calendar.getInstance().getTime();
+    public void createLeavingTime(String currentDate, String leavingTime){
         ContentValues values = new ContentValues();
         values.put(TimeDBSchema.DayEntry.COLUMN_NAME_DATE, currentDate);
-        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_LEAVING, FORMATTER.format(currentTime));
+        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_LEAVING, leavingTime);
 
         SQLiteDatabase writableDatabase = dbDealer.getWritableDatabase();
         writableDatabase.insert(TABLE_NAME, null, values);
@@ -94,25 +92,23 @@ public class DBWriter {
         writableDatabase.insert(TABLE_NAME, null, values);
     }
 
-    public void createEndePause(String currentDate) {
-        Date currentTime = Calendar.getInstance().getTime();
+    public void createEndePause(String currentDate, String endePause) {
         ContentValues values = new ContentValues();
         values.put(TimeDBSchema.DayEntry.COLUMN_NAME_DATE, currentDate);
-        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_ENDE_PAUSE, FORMATTER.format(currentTime));
+        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_ENDE_PAUSE, endePause);
 
         SQLiteDatabase writableDatabase = dbDealer.getWritableDatabase();
         writableDatabase.insert(TABLE_NAME, null, values);
     }
 
-    public void updateEndePause(String currentDate) {
+    public void updateEndePause(String currentDate, String endePause) {
         SQLiteDatabase writableDatabase = dbDealer.getWritableDatabase();
 
         String whereColumns = TimeDBSchema.DayEntry.COLUMN_NAME_DATE + " = ?";
         String[] whereValues = { currentDate };
 
-        Date currentTime = Calendar.getInstance().getTime();
         ContentValues values = new ContentValues();
-        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_ENDE_PAUSE, FORMATTER.format(currentTime));
+        values.put(TimeDBSchema.DayEntry.COLUMN_NAME_ENDE_PAUSE, endePause);
 
         writableDatabase.update(TABLE_NAME,
                 values,whereColumns,whereValues);

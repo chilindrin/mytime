@@ -23,14 +23,6 @@ public class TimeRegister {
         this.context = context;
     }
 
-    public void saveLeavingTime(String currentDate) {
-        if (getDbReader().isCurrentDateAlreadyInDB(currentDate)) {
-            getDbWriter().updateLeavingTime(currentDate);
-        } else {
-            getDbWriter().createLeavingTime(currentDate);
-        }
-    }
-
     public List<String[]> getAllDataInDB(){
         return getDbReader().getAllDataInDB();
     }
@@ -55,16 +47,28 @@ public class TimeRegister {
         }
     }
 
-    private boolean noRegistryInDB(Day registeredDay) {
-        return registeredDay == null;
+    public void saveEndePause(String currentDate, String endePause) {
+        Day registeredDay = getDbReader().getRegisteredDay(currentDate);
+        if (noRegistryInDB(registeredDay)){
+            getDbWriter().createEndePause(currentDate,endePause);
+        } else {
+            DateTimeOperationsProvider.validateEndePause(registeredDay,endePause);
+            getDbWriter().updateEndePause(currentDate,endePause);
+        }
     }
 
-    public void saveEndePause(String currentDate) {
-        if (getDbReader().isCurrentDateAlreadyInDB(currentDate)) {
-            getDbWriter().updateEndePause(currentDate);
+    public void saveLeavingTime(String currentDate, String leavingTime) {
+        Day registeredDay = getDbReader().getRegisteredDay(currentDate);
+        if (noRegistryInDB(registeredDay)){
+            getDbWriter().createLeavingTime(currentDate,leavingTime);
         } else {
-            getDbWriter().createEndePause(currentDate);
+            DateTimeOperationsProvider.validateLeavingTime(registeredDay,leavingTime);
+            getDbWriter().updateLeavingTime(currentDate,leavingTime);
         }
+    }
+
+    private boolean noRegistryInDB(Day registeredDay) {
+        return registeredDay == null;
     }
 
     private DBReader getDbReader(){

@@ -73,12 +73,20 @@ public class InsertTime extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void saveTimeInDB(View view){
         switch (this.operationForThisActivity){
+            case COMING:
+                saveComingTime();
+                finish();
+                break;
             case BEGINN_PAUSE:
                 saveBeginnPause();
                 finish();
                 break;
-            case COMING:
-                saveComingTime();
+            case ENDE_PAUSE:
+                saveEndePause();
+                finish();
+                break;
+            case LEAVING:
+                saveLeavingTime();
                 finish();
                 break;
             default:
@@ -101,6 +109,26 @@ public class InsertTime extends AppCompatActivity {
         try {
             String friendlyCurrentDateMainDisplay = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
             timeRegister.saveBeginnPause(friendlyCurrentDateMainDisplay,getTimeToBook());
+        } catch (MyTimeException ex){
+            new AdviceUser().showBeginnPauseAfterLeavingTime(this,ex.getMessage());
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void saveEndePause() {
+        try {
+            String friendlyCurrentDateMainDisplay = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
+            timeRegister.saveEndePause(friendlyCurrentDateMainDisplay,getTimeToBook());
+        } catch (MyTimeException ex){
+            new AdviceUser().showBeginnPauseAfterLeavingTime(this,ex.getMessage());
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void saveLeavingTime() {
+        try {
+            String friendlyCurrentDateMainDisplay = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
+            timeRegister.saveLeavingTime(friendlyCurrentDateMainDisplay,getTimeToBook());
         } catch (MyTimeException ex){
             new AdviceUser().showBeginnPauseAfterLeavingTime(this,ex.getMessage());
         }
