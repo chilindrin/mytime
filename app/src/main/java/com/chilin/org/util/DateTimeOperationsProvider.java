@@ -147,12 +147,15 @@ public class DateTimeOperationsProvider {
     }
 
     public static void validateEndePause(Day registeredDay, String endePause) {
+
         String currentDate = registeredDay.getDayRegistered();
         String comingTime = registeredDay.getComingTime();
         String beginnPause = registeredDay.getBeginnPause();
         String leavingTime = registeredDay.getLeavingTime();
         if (BinaryConditions.condition001(comingTime, beginnPause, leavingTime)) {
-
+            if (IntervalValidator.isFirstTimeNotBeforeLastTime(currentDate,endePause,leavingTime)){
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
         } else if (BinaryConditions.condition010(comingTime, beginnPause, leavingTime)) {
 
         } else if (BinaryConditions.condition011(comingTime, beginnPause, leavingTime)) {
