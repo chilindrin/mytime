@@ -6,11 +6,16 @@ import java.util.Date;
 
 public class IntervalValidator {
 
-    public static boolean isBeginnPauseNotAfterComingTime(String currentDate, String beginnPause, String comingTime) {
-        Date beginnPauseComlete = createDateForTime(currentDate, beginnPause);
-        Date comingTimeComplete = createDateForTime(currentDate, comingTime);
-        return beginnPauseComlete.equals(comingTimeComplete) ||
-                beginnPauseComlete.before(comingTimeComplete);
+    private static Date createDateForTime(String currentDate,String time){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        String timeString = currentDate + " " + time;
+        Date dateForTime = null;
+        try {
+            dateForTime = formatter.parse(timeString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return dateForTime;
     }
 
     public static boolean isBeginnPausePailas(String currentDate, String beginnPause,String comingTime, String endePause,String leavingTime) {
@@ -23,18 +28,6 @@ public class IntervalValidator {
                 || beginnPauseComlete.after(endePauseComplete)
                 || beginnPauseComlete.equals(endePauseComplete)
                 || beginnPauseComlete.after(leavingTimeComplete);
-    }
-
-    private static Date createDateForTime(String currentDate,String time){
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        String timeString = currentDate + " " + time;
-        Date dateForTime = null;
-        try {
-            dateForTime = formatter.parse(timeString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return dateForTime;
     }
 
     public static boolean isFirstTimeNotBeforeLastTime(String currentDate, String firstTime, String lastTime) {
@@ -52,6 +45,16 @@ public class IntervalValidator {
                 firstTimeComlete.equals(otherOneComplete) ||
                 firstTimeComlete.equals(lastOneComplete) ||
                 firstTimeComlete.after(lastOneComplete);
+    }
+
+    public static boolean isLastTimeNotAfterOtherOneAndNotAfterFirstOne(String currentDate, String firstTime, String otherOne, String lastOne) {
+        Date firstTimeComlete = createDateForTime(currentDate, firstTime);
+        Date otherOneComplete = createDateForTime(currentDate, otherOne);
+        Date lastOneComplete = createDateForTime(currentDate,lastOne);
+        return lastOneComplete.equals(otherOneComplete) ||
+                lastOneComplete.before(otherOneComplete) ||
+                lastOneComplete.equals(firstTimeComlete) ||
+                lastOneComplete.before(firstTimeComlete);
     }
 
     public static boolean isFirstTimeNotBeforeTheOtherOnes(String currentDate,String firstTime,String otherTime,String laterTime,String lastTime){
@@ -75,5 +78,25 @@ public class IntervalValidator {
                 givenTimeComplete.equals(firstTimeComplete) ||
                 givenTimeComplete.equals(lastTimeComplete) ||
                 givenTimeComplete.after(lastTimeComplete);
+    }
+
+    public static boolean isLastTimeNotAfterFirstTime(String currentDate, String firstTime,String lastTime) {
+        Date firstTimeComplete = createDateForTime(currentDate, firstTime);
+        Date lastTimeComlete = createDateForTime(currentDate, lastTime);
+        return lastTimeComlete.equals(firstTimeComplete) ||
+                lastTimeComlete.before(firstTimeComplete);
+    }
+
+    public static boolean isEndePausePailas(String currentDate, String comingTime, String beginnPause, String endePause, String leavingTime) {
+        Date comingTimeComplete = createDateForTime(currentDate, comingTime);
+        Date beginnPauseComlete = createDateForTime(currentDate, beginnPause);
+        Date endePauseComplete = createDateForTime(currentDate, endePause);
+        Date leavingTimeComplete = createDateForTime(currentDate, leavingTime);
+        return endePauseComplete.after(leavingTimeComplete)
+                || endePauseComplete.equals(leavingTimeComplete)
+                || endePauseComplete.equals(beginnPauseComlete)
+                || endePauseComplete.before(beginnPauseComlete)
+                || endePauseComplete.equals(comingTimeComplete)
+                || endePauseComplete.before(comingTimeComplete);
     }
 }

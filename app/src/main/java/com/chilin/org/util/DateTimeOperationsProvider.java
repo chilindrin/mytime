@@ -128,7 +128,7 @@ public class DateTimeOperationsProvider {
                 throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
             }
         } else if (BinaryConditions.condition100(comingTime, endePause, leavingTime)) {
-            if (IntervalValidator.isBeginnPauseNotAfterComingTime(currentDate, beginnPause, comingTime)) {
+            if (IntervalValidator.isLastTimeNotAfterFirstTime(currentDate, comingTime,beginnPause)) {
                 throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
             }
         } else if (BinaryConditions.condition101(comingTime, endePause, leavingTime)) {
@@ -147,7 +147,6 @@ public class DateTimeOperationsProvider {
     }
 
     public static void validateEndePause(Day registeredDay, String endePause) {
-
         String currentDate = registeredDay.getDayRegistered();
         String comingTime = registeredDay.getComingTime();
         String beginnPause = registeredDay.getBeginnPause();
@@ -157,17 +156,29 @@ public class DateTimeOperationsProvider {
                 throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
             }
         } else if (BinaryConditions.condition010(comingTime, beginnPause, leavingTime)) {
-
+            if (IntervalValidator.isLastTimeNotAfterFirstTime(currentDate,beginnPause,endePause)){
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
         } else if (BinaryConditions.condition011(comingTime, beginnPause, leavingTime)) {
-
+            if (IntervalValidator.isGivenTimeNotBetweenFirstTimeAndLastTime(currentDate,endePause,beginnPause,leavingTime)){
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
         } else if (BinaryConditions.condition100(comingTime, beginnPause, leavingTime)) {
-
+            if (IntervalValidator.isLastTimeNotAfterFirstTime(currentDate,comingTime,endePause)){
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
         } else if (BinaryConditions.condition101(comingTime, beginnPause, leavingTime)) {
-
+            if (IntervalValidator.isGivenTimeNotBetweenFirstTimeAndLastTime(currentDate,endePause,comingTime,leavingTime)){
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
         } else if (BinaryConditions.condition110(comingTime, beginnPause, leavingTime)) {
-
+            if (IntervalValidator.isLastTimeNotAfterOtherOneAndNotAfterFirstOne(currentDate,comingTime,beginnPause,endePause)){
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
         } else if (BinaryConditions.condition111(comingTime, beginnPause, leavingTime)) {
-
+            if (IntervalValidator.isEndePausePailas(currentDate,comingTime,beginnPause,endePause,leavingTime)){
+                throw new MyTimeException("Das kannst du so nicht machen. Deine Pause ist nicht innerhalb der Arbeitszeit");
+            }
         }
     }
 
