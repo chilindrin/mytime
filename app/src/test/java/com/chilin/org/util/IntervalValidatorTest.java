@@ -652,4 +652,59 @@ public class IntervalValidatorTest {
         MatcherAssert.assertThat(result,Matchers.is(true));
     }
 
+    @Test
+    public void leavingTimeAfterEndePause_False() {
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "19:00";
+        String endePause = "19:30";
+        String leavingTime = "20:00";
+        boolean result = IntervalValidator.isLeavingTimePailas(currentDate,comingTime,beginnPause,endePause,leavingTime);
+        MatcherAssert.assertThat(result,Matchers.is(false));
+    }
+
+    @Test
+    public void leavingTimeJustAfterEndePause_False() {
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "19:00";
+        String endePause = "19:30";
+        String leavingTime = "19:31";
+        boolean result = IntervalValidator.isLeavingTimePailas(currentDate,comingTime,beginnPause,endePause,leavingTime);
+        MatcherAssert.assertThat(result,Matchers.is(false));
+    }
+
+    @Test
+    public void leavingTimeJustAfterEndePause_True() {
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "19:00";
+        String endePause = "19:30";
+        String leavingTime = "19:30";
+        boolean result = IntervalValidator.isLeavingTimePailas(currentDate,comingTime,beginnPause,endePause,leavingTime);
+        MatcherAssert.assertThat(result,Matchers.is(true));
+    }
+
+    @Test
+    public void leavingTimeJustBeforeEndePause_True() {
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "19:00";
+        String endePause = "19:30";
+        String leavingTime = "19:29";
+        boolean result = IntervalValidator.isLeavingTimePailas(currentDate,comingTime,beginnPause,endePause,leavingTime);
+        MatcherAssert.assertThat(result,Matchers.is(true));
+    }
+
+    @Test
+    public void leavingTimeBeforeEndePause_True() {
+        String currentDate = "12-03-2020";
+        String comingTime = "18:00";
+        String beginnPause = "19:00";
+        String endePause = "19:30";
+        String leavingTime = "19:15";
+        boolean result = IntervalValidator.isLeavingTimePailas(currentDate,comingTime,beginnPause,endePause,leavingTime);
+        MatcherAssert.assertThat(result,Matchers.is(true));
+    }
+
 }

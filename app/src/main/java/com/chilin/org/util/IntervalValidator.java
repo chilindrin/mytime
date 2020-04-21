@@ -99,4 +99,17 @@ public class IntervalValidator {
                 || endePauseComplete.equals(comingTimeComplete)
                 || endePauseComplete.before(comingTimeComplete);
     }
+
+    public static boolean isLeavingTimePailas(String currentDate, String comingTime, String beginnPause, String endePause, String leavingTime) {
+        Date comingTimeComplete = createDateForTime(currentDate, comingTime);
+        Date beginnPauseComlete = createDateForTime(currentDate, beginnPause);
+        Date endePauseComplete = createDateForTime(currentDate, endePause);
+        Date leavingTimeComplete = createDateForTime(currentDate, leavingTime);
+        return leavingTimeComplete.equals(endePauseComplete)
+                || leavingTimeComplete.before(endePauseComplete)
+                || leavingTimeComplete.equals(beginnPauseComlete)
+                || leavingTimeComplete.before(beginnPauseComlete)
+                || leavingTimeComplete.equals(comingTimeComplete)
+                || leavingTimeComplete.before(comingTimeComplete);
+    }
 }
