@@ -75,19 +75,15 @@ public class InsertTime extends AppCompatActivity {
         switch (this.operationForThisActivity){
             case COMING:
                 saveComingTime();
-                finish();
                 break;
             case BEGINN_PAUSE:
                 saveBeginnPause();
-                finish();
                 break;
             case ENDE_PAUSE:
                 saveEndePause();
-                finish();
                 break;
             case LEAVING:
                 saveLeavingTime();
-                finish();
                 break;
             default:
                 throw new MyTimeException("There is no other operation to perform");
@@ -99,6 +95,7 @@ public class InsertTime extends AppCompatActivity {
         try {
             String friendlyCurrentDateMainDisplay = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
             timeRegister.saveComingTime(friendlyCurrentDateMainDisplay,getTimeToBook());
+            finish();
         } catch (MyTimeException ex){
             new AdviceUser().showBeginnPauseAfterLeavingTime(this,ex.getMessage());
         }
@@ -109,6 +106,7 @@ public class InsertTime extends AppCompatActivity {
         try {
             String friendlyCurrentDateMainDisplay = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
             timeRegister.saveBeginnPause(friendlyCurrentDateMainDisplay,getTimeToBook());
+            finish();
         } catch (MyTimeException ex){
             new AdviceUser().showBeginnPauseAfterLeavingTime(this,ex.getMessage());
         }
@@ -119,6 +117,7 @@ public class InsertTime extends AppCompatActivity {
         try {
             String friendlyCurrentDateMainDisplay = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
             timeRegister.saveEndePause(friendlyCurrentDateMainDisplay,getTimeToBook());
+            finish();
         } catch (MyTimeException ex){
             new AdviceUser().showBeginnPauseAfterLeavingTime(this,ex.getMessage());
         }
@@ -129,6 +128,7 @@ public class InsertTime extends AppCompatActivity {
         try {
             String friendlyCurrentDateMainDisplay = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
             timeRegister.saveLeavingTime(friendlyCurrentDateMainDisplay,getTimeToBook());
+            finish();
         } catch (MyTimeException ex){
             new AdviceUser().showBeginnPauseAfterLeavingTime(this,ex.getMessage());
         }
