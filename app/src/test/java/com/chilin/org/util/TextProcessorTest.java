@@ -36,4 +36,25 @@ public class TextProcessorTest {
         MatcherAssert.assertThat(time, CoreMatchers.is("21:21"));
     }
 
+    @Test
+    public void getTwoDigitsNumber_OneDigitNumber_LeadingZeroInserted(){
+        int input = 5;
+        String twoDigitsNumber = TextProcessor.getTwoDigitsNumber(input);
+        MatcherAssert.assertThat(twoDigitsNumber,CoreMatchers.is("05"));
+    }
+
+    @Test
+    public void getTwoDigitsNumber_TwoDigitNumber_LeadingZeroInserted(){
+        int input = 05;
+        String twoDigitsNumber = TextProcessor.getTwoDigitsNumber(input);
+        MatcherAssert.assertThat(twoDigitsNumber,CoreMatchers.is("05"));
+    }
+
+    @Test
+    public void getTwoDigitsNumber_OneZero_TwoZeros(){
+        int input = 0;
+        String twoDigitsNumber = TextProcessor.getTwoDigitsNumber(input);
+        MatcherAssert.assertThat(twoDigitsNumber,CoreMatchers.is("00"));
+    }
+
 }

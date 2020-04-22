@@ -15,10 +15,11 @@ import androidx.appcompat.widget.Toolbar;
 import com.chilin.org.backup.BackupCreatorActivity;
 import com.chilin.org.constants.Operation;
 import com.chilin.org.db.TimeRegister;
+import com.chilin.org.report.DailyReportActivity;
 import com.chilin.org.report.ReportCreatorActivity;
 import com.chilin.org.util.DateTimeOperationsProvider;
 import com.chilin.org.view.AdviceUser;
-import com.chilin.org.view.InsertTime;
+import com.chilin.org.stempeln.InsertTime;
 
 import java.time.LocalDateTime;
 
@@ -52,9 +53,17 @@ public class MainActivity extends AppCompatActivity {
             case R.id.createBackup:
                 showCreateBackupActivity();
                 return true;
+            case R.id.showShortReport:
+                showShortReport();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showShortReport() {
+        Intent intentForDailyReport = new Intent(this, DailyReportActivity.class);
+        startActivity(intentForDailyReport);
     }
 
     private void showCreateBackupActivity() {

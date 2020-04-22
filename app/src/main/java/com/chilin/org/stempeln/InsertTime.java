@@ -1,4 +1,4 @@
-package com.chilin.org.view;
+package com.chilin.org.stempeln;
 
 import android.content.Intent;
 import android.os.Build;
@@ -19,6 +19,7 @@ import com.chilin.org.db.TimeRegister;
 import com.chilin.org.exception.MyTimeException;
 import com.chilin.org.util.DateTimeOperationsProvider;
 import com.chilin.org.util.TextProcessor;
+import com.chilin.org.view.AdviceUser;
 
 import java.time.LocalDateTime;
 

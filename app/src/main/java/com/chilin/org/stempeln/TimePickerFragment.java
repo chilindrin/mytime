@@ -1,4 +1,4 @@
-package com.chilin.org.view;
+package com.chilin.org.stempeln;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -10,6 +10,8 @@ import android.widget.TimePicker;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
+
+import com.chilin.org.util.TextProcessor;
 
 import java.util.Calendar;
 
@@ -37,7 +39,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-        this.hourTextView.setText(String.valueOf(timePicker.getHour()));
-        this.minuteTextView.setText(String.valueOf(timePicker.getMinute()));
+        this.hourTextView.setText(TextProcessor.getTwoDigitsNumber(timePicker.getHour()));
+        this.minuteTextView.setText(TextProcessor.getTwoDigitsNumber(timePicker.getMinute()));
     }
 }

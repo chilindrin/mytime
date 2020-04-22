@@ -60,6 +60,8 @@ public class ReportCreatorActivity extends AppCompatActivity {
     private TableRow createReportHeader(){
         TextView datumHeader = createTextCell("Datum");
         TextView kommenHeader = createTextCell("Kommen");
+        TextView pauseBeginnHeader = createTextCell("P.Beginn");
+        TextView pauseEndeHeader = createTextCell("P.Ende");
         TextView gehenHeader = createTextCell("Gehen");
         TextView pauseHeader =createTextCell("Pause");
 
@@ -68,6 +70,8 @@ public class ReportCreatorActivity extends AppCompatActivity {
         TextView separatorText3 = createTextCell("||");
         TextView separatorText4 = createTextCell("||");
         TextView separatorText5 = createTextCell("||");
+        TextView separatorText6 = createTextCell("||");
+        TextView separatorText7 = createTextCell("||");
 
         TableRow tableHeader = new TableRow(this);
         tableHeader.addView(separatorText1);
@@ -75,10 +79,14 @@ public class ReportCreatorActivity extends AppCompatActivity {
         tableHeader.addView(separatorText2);
         tableHeader.addView(kommenHeader);
         tableHeader.addView(separatorText3);
-        tableHeader.addView(gehenHeader);
+        tableHeader.addView(pauseBeginnHeader);
         tableHeader.addView(separatorText4);
-        tableHeader.addView(pauseHeader);
+        tableHeader.addView(pauseEndeHeader);
         tableHeader.addView(separatorText5);
+        tableHeader.addView(gehenHeader);
+        tableHeader.addView(separatorText6);
+        tableHeader.addView(pauseHeader);
+        tableHeader.addView(separatorText7);
 
         Log.i(TAG, "createRow executed successfully.");
         return tableHeader;
@@ -88,6 +96,8 @@ public class ReportCreatorActivity extends AppCompatActivity {
     private TableRow createRow(String[] dailyReport) {
         TextView workingDay = createTextCell(dailyReport[DayTableOrder.CURRENT_DAY_POSITION]);
         TextView comingTime = createTextCell(dailyReport[DayTableOrder.COMMING_POSITION]);
+        TextView pauseBeginnTime = createTextCell(dailyReport[DayTableOrder.BEGINN_PAUSE_POSITION]);
+        TextView pauseEndeTime = createTextCell(dailyReport[DayTableOrder.ENDE_PAUSE_POSITION]);
         TextView leavingTime = createTextCell(dailyReport[DayTableOrder.LEAVING_POSITION]);
         TextView pauseView = createTextCell(DateTimeOperationsProvider.createPause(
                 dailyReport[DayTableOrder.CURRENT_DAY_POSITION],
@@ -99,6 +109,8 @@ public class ReportCreatorActivity extends AppCompatActivity {
         TextView separatorText3 = createTextCell("||");
         TextView separatorText4 = createTextCell("||");
         TextView separatorText5 = createTextCell("||");
+        TextView separatorText6 = createTextCell("||");
+        TextView separatorText7 = createTextCell("||");
 
         TableRow tableRow = new TableRow(this);
         tableRow.addView(separatorText1);
@@ -106,10 +118,14 @@ public class ReportCreatorActivity extends AppCompatActivity {
         tableRow.addView(separatorText2);
         tableRow.addView(comingTime);
         tableRow.addView(separatorText3);
-        tableRow.addView(leavingTime);
+        tableRow.addView(pauseBeginnTime);
         tableRow.addView(separatorText4);
-        tableRow.addView(pauseView);
+        tableRow.addView(pauseEndeTime);
         tableRow.addView(separatorText5);
+        tableRow.addView(leavingTime);
+        tableRow.addView(separatorText6);
+        tableRow.addView(pauseView);
+        tableRow.addView(separatorText7);
 
         Log.i(TAG, "createRow executed successfully.");
         return tableRow;

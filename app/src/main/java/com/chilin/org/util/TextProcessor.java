@@ -118,4 +118,8 @@ public class TextProcessor {
         return String.format("%02d:%02d", hours, minutes);
     }
 
+    public static String getTwoDigitsNumber(int input){
+        return String.format("%02d", input);
+    }
+
 }

@@ -7,5 +7,10 @@
         app:showAsAction="ifRoom"
         android:title="Secure data">
     </item>
+    <item
+        android:id="@+id/showShortReport"
+        app:showAsAction="ifRoom"
+        android:title="Report">
+    </item>
 
 </menu>
