@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String OPERATION = "OPERATION";
     public static final String CURENT_DATE_OBJEKT = "CURRENT_DATE_OBJEKT";
 
-    private TimeRegister timeRegister;
     private LocalDateTime currentDate;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.timeRegister = new TimeRegister(this);
         setCurrentDateOnDisplay();
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
     }
@@ -47,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
@@ -61,8 +60,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void showShortReport() {
         Intent intentForDailyReport = new Intent(this, DailyReportActivity.class);
+        intentForDailyReport.putExtra(CURENT_DATE_OBJEKT,this.currentDate);
         startActivity(intentForDailyReport);
     }
 
