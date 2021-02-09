@@ -1,5 +1,7 @@
 package com.chilin.org.util;
 
+import com.chilin.org.stempeln.IntervalValidator;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;

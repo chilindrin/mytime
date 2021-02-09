@@ -1,32 +1,31 @@
 package com.chilin.org.db;
 
-import android.provider.BaseColumns;
+import com.chilin.org.db.entity.AbrufEntity;
+import com.chilin.org.db.entity.DayEntity;
 
 public final class TimeDBSchema {
 
-    /* Inner class that defines the table contents */
-    public static class DayEntry implements BaseColumns {
-        public static final String TABLE_NAME = "entry";
-        public static final String COLUMN_NAME_DATE = "date";
-        public static final String COLUMN_NAME_COMMING = "comming";
-        public static final String COLUMN_NAME_BEGINN_PAUSE = "beginnpause";
-        public static final String COLUMN_NAME_ENDE_PAUSE = "endepause";
-        public static final String COLUMN_NAME_LEAVING = "leaving";
-    }
-
     public static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + DayEntry.TABLE_NAME + " (" +
-                    DayEntry._ID + " INTEGER PRIMARY KEY," +
-                    DayEntry.COLUMN_NAME_DATE + " TEXT," +
-                    DayEntry.COLUMN_NAME_COMMING + " TEXT," +
-                    DayEntry.COLUMN_NAME_BEGINN_PAUSE + " TEXT," +
-                    DayEntry.COLUMN_NAME_ENDE_PAUSE + " TEXT," +
-                    DayEntry.COLUMN_NAME_LEAVING + " TEXT)";
+            "CREATE TABLE " + DayEntity.TABLE_NAME + " (" +
+                    DayEntity._ID + " INTEGER PRIMARY KEY," +
+                    DayEntity.COLUMN_NAME_DATE + " TEXT," +
+                    DayEntity.COLUMN_NAME_COMMING + " TEXT," +
+                    DayEntity.COLUMN_NAME_BEGINN_PAUSE + " TEXT," +
+                    DayEntity.COLUMN_NAME_ENDE_PAUSE + " TEXT," +
+                    DayEntity.COLUMN_NAME_LEAVING + " TEXT)";
+
+    public static final String CREATE_ABRUF_TABLE =
+            "CREATE TABLE " + AbrufEntity.TABLE_NAME + " (" +
+                    AbrufEntity._ID + " INTEGER PRIMARY KEY," +
+                    AbrufEntity.NAME + " TEXT," +
+                    AbrufEntity.START_DATE + " TEXT," +
+                    AbrufEntity.END_DATE + " TEXT," +
+                    AbrufEntity.BESTELLTE_STUNDEN + " TEXT)";
 
     public static final String SQL_ADD_COLUMN_BEGINN_PAUSE =
-            "ALTER TABLE "+DayEntry.TABLE_NAME+" ADD COLUMN "+DayEntry.COLUMN_NAME_BEGINN_PAUSE+" TEXT";
+            "ALTER TABLE "+DayEntity.TABLE_NAME+" ADD COLUMN "+DayEntity.COLUMN_NAME_BEGINN_PAUSE+" TEXT";
 
     public static final String SQL_ADD_COLUMN_ENDE_PAUSE =
-            "ALTER TABLE "+DayEntry.TABLE_NAME+" ADD COLUMN "+DayEntry.COLUMN_NAME_ENDE_PAUSE+" TEXT";
+            "ALTER TABLE "+DayEntity.TABLE_NAME+" ADD COLUMN "+DayEntity.COLUMN_NAME_ENDE_PAUSE+" TEXT";
 
 }

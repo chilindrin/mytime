@@ -1,22 +1,10 @@
-package com.chilin.org.util;
+package com.chilin.org.stempeln;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class IntervalValidator {
-
-    private static Date createDateForTime(String currentDate,String time){
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        String timeString = currentDate + " " + time;
-        Date dateForTime = null;
-        try {
-            dateForTime = formatter.parse(timeString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return dateForTime;
-    }
 
     public static boolean isBeginnPausePailas(String currentDate, String beginnPause,String comingTime, String endePause,String leavingTime) {
         Date comingTimeComplete = createDateForTime(currentDate, comingTime);
@@ -111,5 +99,17 @@ public class IntervalValidator {
                 || leavingTimeComplete.before(beginnPauseComlete)
                 || leavingTimeComplete.equals(comingTimeComplete)
                 || leavingTimeComplete.before(comingTimeComplete);
+    }
+
+    private static Date createDateForTime(String currentDate,String time){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        String timeString = currentDate + " " + time;
+        Date dateForTime = null;
+        try {
+            dateForTime = formatter.parse(timeString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return dateForTime;
     }
 }

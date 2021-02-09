@@ -1,9 +1,11 @@
-package com.chilin.org.db;
+package com.chilin.org.db.stempel;
 
 import android.content.Context;
 
 import androidx.test.core.app.ApplicationProvider;
 
+import com.chilin.org.db.stempel.DBReader;
+import com.chilin.org.db.stempel.DBWriter;
 import com.chilin.org.model.Day;
 
 import org.hamcrest.CoreMatchers;
@@ -121,7 +123,79 @@ public class DBWriterTest {
         cleanData(currentDate);
     }
 
+    @Test
+    public void deleteDay_DateToDelete_DayDoesNotExistInDBAnyMore(){
+        // Given
+        String currentDate = "24-12-2020";
+        cleanData(currentDate);
+
+        Day registeredDay = dbReader.getRegisteredDay(currentDate);
+        MatcherAssert.assertThat(registeredDay,CoreMatchers.is(CoreMatchers.nullValue()));
+
+        Day dayToDelete = new Day();
+        dayToDelete.setDayRegistered(currentDate);
+        dayToDelete.setComingTime("8:00");
+        dayToDelete.setBeginnPause("9:00");
+        dayToDelete.setEndePause("9:15");
+        dayToDelete.setLeavingTime("17:00");
+
+        sut.createDay(dayToDelete);
+
+        Day createdDayToDelete = dbReader.getRegisteredDay(currentDate);
+        MatcherAssert.assertThat(createdDayToDelete,CoreMatchers.is(CoreMatchers.notNullValue()));
+        MatcherAssert.assertThat(createdDayToDelete.getDayRegistered(),CoreMatchers.is(currentDate));
+
+        // When
+        sut.deleteDay(currentDate);
+
+        // Then
+        Day resultDelete = dbReader.getRegisteredDay(currentDate);
+        MatcherAssert.assertThat(resultDelete,CoreMatchers.is(CoreMatchers.nullValue()));
+
+        cleanData(currentDate);
+    }
+
+    @Test
+    public void changeDay_OldValues_ValuesAreChanged(){
+        // Given
+        String currentDate = "24-12-2020";
+        cleanData(currentDate);
+
+        Day registeredDay = dbReader.getRegisteredDay(currentDate);
+        MatcherAssert.assertThat(registeredDay,CoreMatchers.is(CoreMatchers.nullValue()));
+
+        Day oldValues = new Day();
+        oldValues.setDayRegistered(currentDate);
+        oldValues.setComingTime("8:00");
+        oldValues.setBeginnPause("9:00");
+        oldValues.setEndePause("9:15");
+        oldValues.setLeavingTime("17:00");
+
+        sut.createDay(oldValues);
+
+        Day oldValuesSaved = dbReader.getRegisteredDay(currentDate);
+        MatcherAssert.assertThat(oldValuesSaved,CoreMatchers.is(CoreMatchers.notNullValue()));
+
+        Day newValues = new Day();
+        newValues.setDayRegistered(currentDate);
+        // NEW VALUE
+        newValues.setComingTime("8:30");
+        newValues.setBeginnPause("9:00");
+        newValues.setEndePause("9:15");
+        newValues.setLeavingTime("17:00");
+
+        // When
+        int rowsAffected = sut.updateDay(newValues);
+
+        MatcherAssert.assertThat(rowsAffected,CoreMatchers.is(1));
+
+        Day newValuesSaved = dbReader.getRegisteredDay(currentDate);
+        MatcherAssert.assertThat(newValuesSaved.getComingTime(),CoreMatchers.is("8:30"));
+
+        cleanData(currentDate);
+    }
+
     private void cleanData(String currentDate){
-        sut.deleteInfo(currentDate);
+        sut.deleteDay(currentDate);
     }
 }

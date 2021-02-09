@@ -5,7 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import com.chilin.org.db.DBReader;
+import com.chilin.org.db.stempel.DBReader;
 import com.chilin.org.util.TextProcessor;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.http.ByteArrayContent;

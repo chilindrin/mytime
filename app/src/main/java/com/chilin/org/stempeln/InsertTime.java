@@ -4,24 +4,26 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.DialogFragment;
 
 import com.chilin.org.MainActivity;
 import com.chilin.org.R;
+import com.chilin.org.advice.AdviceUser;
 import com.chilin.org.constants.Operation;
-import com.chilin.org.db.TimeRegister;
 import com.chilin.org.exception.MyTimeException;
-import com.chilin.org.util.DateTimeOperationsProvider;
+import com.chilin.org.util.DateTimeOperator;
 import com.chilin.org.util.TextProcessor;
-import com.chilin.org.view.AdviceUser;
 
 import java.time.LocalDateTime;
+
+import static com.chilin.org.MainActivity.CURENT_DATE_OBJEKT;
 
 public class InsertTime extends AppCompatActivity {
 
@@ -35,9 +37,12 @@ public class InsertTime extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert_time);
         this.timeRegister = new TimeRegister(this);
+        Intent intentFromMainActivity = getIntent();
+        this.currentDateFromMainDisplay = (LocalDateTime) intentFromMainActivity
+                .getSerializableExtra(CURENT_DATE_OBJEKT);
         setOperationToDo();
         setUpButtonInToolbar();
-        setHoursAndMinutesToDisplay();
+        setTimesInSpinner();
     }
 
     private void setOperationToDo() {
@@ -55,20 +60,12 @@ public class InsertTime extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void setHoursAndMinutesToDisplay(){
-        Intent intentFromMainActivity = getIntent();
-        currentDateFromMainDisplay = (LocalDateTime) intentFromMainActivity.getSerializableExtra(MainActivity.CURENT_DATE_OBJEKT);
-        TextView hourTextView = findViewById(R.id.hourTextView);
-        hourTextView.setText(String.valueOf(currentDateFromMainDisplay.getHour()));
-        TextView minuteTextView = findViewById(R.id.minuteTextView);
-        minuteTextView.setText(String.valueOf(currentDateFromMainDisplay.getMinute()));
-    }
-
-    public void changeTimeBeingDisplayed(View view){
-        TextView hourTextView = findViewById(R.id.hourTextView);
-        TextView minuteTextView = findViewById(R.id.minuteTextView);
-        DialogFragment newFragment = new TimePickerFragment(hourTextView,minuteTextView);
-        newFragment.show(getSupportFragmentManager(), "timePicker");
+    private void setTimesInSpinner(){
+        Spinner spinner = findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.stempel_coming, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -94,7 +91,7 @@ public class InsertTime extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void saveComingTime() {
         try {
-            String friendlyCurrentDateMainDisplay = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
+            String friendlyCurrentDateMainDisplay = DateTimeOperator.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
             timeRegister.saveComingTime(friendlyCurrentDateMainDisplay,getTimeToBook());
             finish();
         } catch (MyTimeException ex){
@@ -105,7 +102,7 @@ public class InsertTime extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void saveBeginnPause() {
         try {
-            String friendlyCurrentDateMainDisplay = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
+            String friendlyCurrentDateMainDisplay = DateTimeOperator.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
             timeRegister.saveBeginnPause(friendlyCurrentDateMainDisplay,getTimeToBook());
             finish();
         } catch (MyTimeException ex){
@@ -116,7 +113,7 @@ public class InsertTime extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void saveEndePause() {
         try {
-            String friendlyCurrentDateMainDisplay = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
+            String friendlyCurrentDateMainDisplay = DateTimeOperator.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
             timeRegister.saveEndePause(friendlyCurrentDateMainDisplay,getTimeToBook());
             finish();
         } catch (MyTimeException ex){
@@ -127,7 +124,7 @@ public class InsertTime extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void saveLeavingTime() {
         try {
-            String friendlyCurrentDateMainDisplay = DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
+            String friendlyCurrentDateMainDisplay = DateTimeOperator.getFriendlyFormatCurrentDate(this.currentDateFromMainDisplay);
             timeRegister.saveLeavingTime(friendlyCurrentDateMainDisplay,getTimeToBook());
             finish();
         } catch (MyTimeException ex){
@@ -137,11 +134,8 @@ public class InsertTime extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private String getTimeToBook(){
-        TextView hoursView = findViewById(R.id.hourTextView);
-        String selectedHours = (String) hoursView.getText();
-        TextView minutesView = findViewById(R.id.minuteTextView);
-        String selectedMinutes = (String) minutesView.getText();
-        return TextProcessor.getTime(Integer.parseInt(selectedHours),Integer.parseInt(selectedMinutes));
+        Spinner selectingTime = findViewById(R.id.spinner);
+        return selectingTime.getSelectedItem().toString();
     }
 
 }

@@ -4,22 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".report.daily.DailyReportActivity">
+    tools:context=".day.update.DayEditorActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar2"
+        android:id="@+id/dayEditorToolbar"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:background="@android:color/holo_blue_light"
+        android:clickable="true"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TableLayout
+        android:id="@+id/tableLayout"
         android:layout_width="wrap_content"
-        android:layout_height="420dp"
+        android:layout_height="342dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="36dp"
@@ -28,20 +31,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar2">
+        app:layout_constraintTop_toBottomOf="@+id/dayEditorToolbar">
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/dayToChange"
                 android:layout_weight="1"
                 android:text="Buchung für:"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
-                android:id="@+id/dailyReportCurrentDay"
+                android:id="@+id/dayToChangeValue"
                 android:layout_weight="1"
                 android:text=""
                 android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -52,16 +55,19 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/comingTimeToChange"
                 android:layout_weight="1"
-                android:text="Kommen:"
+                android:text="Kommen Zeit:"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <TextView
-                android:id="@+id/dailyReportComingTime"
-                android:layout_weight="1"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+            <EditText
+                android:id="@+id/comingTimeToChangeValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:layout_editor_absoluteX="88dp"
+                tools:layout_editor_absoluteY="103dp" />
         </TableRow>
 
         <TableRow
@@ -69,16 +75,19 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/beginnPauseToChange"
                 android:layout_weight="1"
                 android:text="Beginn Pause:"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <TextView
-                android:id="@+id/dailyReportBeginnPause"
-                android:layout_weight="1"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+            <EditText
+                android:id="@+id/beginnPauseToChangeValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:layout_editor_absoluteX="88dp"
+                tools:layout_editor_absoluteY="103dp" />
         </TableRow>
 
         <TableRow
@@ -86,16 +95,19 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/endPauseToChange"
                 android:layout_weight="1"
                 android:text="Ende Pause:"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <TextView
-                android:id="@+id/dailyReportEndePause"
-                android:layout_weight="1"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+            <EditText
+                android:id="@+id/endPauseToChangeValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:layout_editor_absoluteX="88dp"
+                tools:layout_editor_absoluteY="103dp" />
         </TableRow>
 
         <TableRow
@@ -103,52 +115,32 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/leavingTimeToChange"
                 android:layout_weight="1"
                 android:text="Gehen:"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <TextView
-                android:id="@+id/dailyReportLeavingTime"
-                android:layout_weight="1"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_weight="1"
-                android:text="Länge des Relaxes:"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:id="@+id/dailyReportPauseDauer"
-                android:layout_weight="1"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_weight="1"
-                android:text="Gearbeitete Zeit am Tag:"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:id="@+id/dailyReportArbeitTag"
-                android:layout_weight="1"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+            <EditText
+                android:id="@+id/leavingTimeToChangeValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:layout_editor_absoluteX="88dp"
+                tools:layout_editor_absoluteY="103dp" />
         </TableRow>
 
     </TableLayout>
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:onClick="saveDay"
+        android:text="Speichern"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

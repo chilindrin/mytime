@@ -1,14 +1,10 @@
-package com.chilin.org.db;
+package com.chilin.org.stempeln;
 
 import android.content.Context;
 
-import com.chilin.org.exception.MyTimeException;
+import com.chilin.org.db.stempel.DBReader;
+import com.chilin.org.db.stempel.DBWriter;
 import com.chilin.org.model.Day;
-import com.chilin.org.util.DateTimeOperationsProvider;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.List;
 
 import lombok.Setter;
 
@@ -23,17 +19,14 @@ public class TimeRegister {
         this.context = context;
     }
 
-    public List<String[]> getAllDataInDB(){
-        return getDbReader().getAllDataInDB();
-    }
-
     public void saveComingTime(String currentDate,String comingTime) {
         Day registeredDay = getDbReader().getRegisteredDay(currentDate);
         if (noRegistryInDB(registeredDay)){
             getDbWriter().createComingTime(currentDate,comingTime);
         } else {
-            DateTimeOperationsProvider.validateComingTime(registeredDay,comingTime);
+            InsertTimeValidator.validateComingTime(registeredDay,comingTime);
             getDbWriter().updateComingTime(currentDate,comingTime);
+
         }
     }
 
@@ -42,7 +35,7 @@ public class TimeRegister {
         if (noRegistryInDB(registeredDay)){
             getDbWriter().createBeginnPause(currentDate,beginnPause);
         } else {
-            DateTimeOperationsProvider.validateBeginnPause(registeredDay,beginnPause);
+            InsertTimeValidator.validateBeginnPause(registeredDay,beginnPause);
             getDbWriter().updateBeginnPause(currentDate,beginnPause);
         }
     }
@@ -52,7 +45,7 @@ public class TimeRegister {
         if (noRegistryInDB(registeredDay)){
             getDbWriter().createEndePause(currentDate,endePause);
         } else {
-            DateTimeOperationsProvider.validateEndePause(registeredDay,endePause);
+            InsertTimeValidator.validateEndePause(registeredDay,endePause);
             getDbWriter().updateEndePause(currentDate,endePause);
         }
     }
@@ -62,7 +55,7 @@ public class TimeRegister {
         if (noRegistryInDB(registeredDay)){
             getDbWriter().createLeavingTime(currentDate,leavingTime);
         } else {
-            DateTimeOperationsProvider.validateLeavingTime(registeredDay,leavingTime);
+            InsertTimeValidator.validateLeavingTime(registeredDay,leavingTime);
             getDbWriter().updateLeavingTime(currentDate,leavingTime);
         }
     }

@@ -3,14 +3,47 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/createBackup"
-        app:showAsAction="ifRoom"
-        android:title="Secure data">
-    </item>
-    <item
-        android:id="@+id/showShortReport"
-        app:showAsAction="ifRoom"
-        android:title="Report">
+        android:id="@+id/threePoints"
+        android:title="Options"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_more_vert_24px">
+        <menu>
+            <item
+                android:id="@+id/showDailyReport"
+                android:title="Taglicher Bericht"
+                app:showAsAction="ifRoom">
+            </item>
+            <item
+                android:id="@+id/showMonthlyReport"
+                android:title="Monatlicher Bericht"
+                app:showAsAction="ifRoom">
+            </item>
+            <item
+                android:id="@+id/editDay"
+                android:title="Ändere Tag"
+                app:showAsAction="ifRoom">
+            </item>
+            <item
+                android:id="@+id/deleteDay"
+                android:title="Entferne Tag"
+                app:showAsAction="ifRoom">
+            </item>
+            <item
+                android:id="@+id/createBackup"
+                android:title="Erstelle Backup"
+                app:showAsAction="ifRoom">
+            </item>
+            <item
+                android:id="@+id/feierabend"
+                android:title="Feierabend?"
+                app:showAsAction="ifRoom">
+            </item>
+            <item
+                android:id="@+id/speichereAbruf"
+                android:title="Erstelle Contingent"
+                app:showAsAction="ifRoom">
+            </item>
+        </menu>
     </item>
 
 </menu>

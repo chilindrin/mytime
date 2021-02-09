@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.chilin.org.R;
-import com.chilin.org.view.AdviceUser;
+import com.chilin.org.advice.AdviceUser;
 
 public class BackupCreatorActivity extends AppCompatActivity {
 

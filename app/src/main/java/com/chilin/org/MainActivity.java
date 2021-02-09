@@ -12,14 +12,17 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.chilin.org.advice.AdviceUser;
 import com.chilin.org.backup.BackupCreatorActivity;
 import com.chilin.org.constants.Operation;
-import com.chilin.org.db.TimeRegister;
-import com.chilin.org.report.DailyReportActivity;
-import com.chilin.org.report.ReportCreatorActivity;
-import com.chilin.org.util.DateTimeOperationsProvider;
-import com.chilin.org.view.AdviceUser;
+import com.chilin.org.abruf.AbrufErstellerActivity;
+import com.chilin.org.day.delete.ChooseDayToDelete;
+import com.chilin.org.day.update.ChooseDayToChange;
+import com.chilin.org.feierabend.FeierabendRechner;
+import com.chilin.org.report.daily.ChooseDateActivity;
+import com.chilin.org.report.monthly.ChooseMonthActivity;
 import com.chilin.org.stempeln.InsertTime;
+import com.chilin.org.util.DateTimeOperator;
 
 import java.time.LocalDateTime;
 
@@ -52,8 +55,23 @@ public class MainActivity extends AppCompatActivity {
             case R.id.createBackup:
                 showCreateBackupActivity();
                 return true;
-            case R.id.showShortReport:
-                showShortReport();
+            case R.id.showDailyReport:
+                showChooseDateForReportActivity();
+                return true;
+            case R.id.showMonthlyReport:
+                showChooseMonthForReportActivity();
+                return true;
+            case R.id.editDay:
+                showChooseDayToChange();
+                return true;
+            case R.id.deleteDay:
+                showChooseDayToDelete();
+                return true;
+            case R.id.feierabend:
+                calculateFeierabendTime();
+                return true;
+            case R.id.speichereAbruf:
+                speichereAbruf();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -61,9 +79,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void showShortReport() {
-        Intent intentForDailyReport = new Intent(this, DailyReportActivity.class);
-        intentForDailyReport.putExtra(CURENT_DATE_OBJEKT,this.currentDate);
+    private void speichereAbruf() {
+        Intent speichereAbrufIntent = new Intent(this, AbrufErstellerActivity.class);
+        speichereAbrufIntent.putExtra(CURENT_DATE_OBJEKT, this.currentDate);
+        startActivity(speichereAbrufIntent);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void calculateFeierabendTime() {
+        FeierabendRechner feierabendRechner = new FeierabendRechner();
+        String feierabendMessage = feierabendRechner
+                .calculateFeierabend(DateTimeOperator
+                        .getFriendlyFormatCurrentDate(this.currentDate), this);
+        new AdviceUser().showFeierabendBerechnung(this,feierabendMessage);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void showChooseDayToDelete() {
+        Intent deleteDayIntent = new Intent(this, ChooseDayToDelete.class);
+        deleteDayIntent.putExtra(CURENT_DATE_OBJEKT, this.currentDate);
+        startActivity(deleteDayIntent);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void showChooseDayToChange() {
+        Intent changeDayIntent = new Intent(this, ChooseDayToChange.class);
+        changeDayIntent.putExtra(CURENT_DATE_OBJEKT, this.currentDate);
+        startActivity(changeDayIntent);
+    }
+
+    private void showChooseMonthForReportActivity() {
+        Intent intentForMonthlyReport = new Intent(this, ChooseMonthActivity.class);
+        startActivity(intentForMonthlyReport);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void showChooseDateForReportActivity() {
+        Intent intentForDailyReport = new Intent(this, ChooseDateActivity.class);
+        intentForDailyReport.putExtra(CURENT_DATE_OBJEKT, this.currentDate);
         startActivity(intentForDailyReport);
     }
 
@@ -74,20 +127,15 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void setCurrentDateOnDisplay() {
-        this.currentDate = DateTimeOperationsProvider.getCurrentDate();
+        this.currentDate = DateTimeOperator.getCurrentDate();
 
         TextView currentDateTextView = findViewById(R.id.currentDateTextView);
-        currentDateTextView.setText(DateTimeOperationsProvider.getFriendlyFormatCurrentDate(this.currentDate));
-    }
-
-    public void createReport(View view){
-        Intent intent = new Intent(this, ReportCreatorActivity.class);
-        startActivity(intent);
+        currentDateTextView.setText(DateTimeOperator.getFriendlyFormatCurrentDate(this.currentDate));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void saveComingTime(View view){
-        if (DateTimeOperationsProvider.isWeekend(this.currentDate)){
+        if (DateTimeOperator.isWeekend(this.currentDate)){
             new AdviceUser().showSorryWeekend(view.getContext());
         } else {
             Intent intent = new Intent(this, InsertTime.class);
@@ -99,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void beginnPause(View view){
-        if (DateTimeOperationsProvider.isWeekend(this.currentDate)){
+        if (DateTimeOperator.isWeekend(this.currentDate)){
             new AdviceUser().showSorryWeekend(view.getContext());
         } else {
             Intent intent = new Intent(this, InsertTime.class);
@@ -111,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void endePause(View view){
-        if (DateTimeOperationsProvider.isWeekend(this.currentDate)){
+        if (DateTimeOperator.isWeekend(this.currentDate)){
             new AdviceUser().showSorryWeekend(view.getContext());
         } else {
             Intent intent = new Intent(this, InsertTime.class);
@@ -123,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void saveLeavingTime(View view) {
-        if (DateTimeOperationsProvider.isWeekend(this.currentDate)){
+        if (DateTimeOperator.isWeekend(this.currentDate)){
             new AdviceUser().showSorryWeekend(view.getContext());
         } else {
             Intent intent = new Intent(this, InsertTime.class);

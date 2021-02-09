@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".day.delete.ChooseDayToDelete">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/deleteDayToolbar"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:background="@android:color/holo_blue_light"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/dayDeleteQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_marginTop="32dp"
+        android:text="Welchen Tag möchtest du löschen du Arsch?"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deleteDayToolbar" />
+
+    <TextView
+        android:id="@+id/selectedDayToDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:text="TextView"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dayDeleteQuestion" />
+
+    <Button
+        android:id="@+id/chooseDayToDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="32dp"
+        android:onClick="showDatePickerToChooseDayToDelete"
+        android:text="Change"
+        app:layout_constraintEnd_toStartOf="@+id/dateToDeleteSelected"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectedDayToDelete" />
+
+    <Button
+        android:id="@+id/dateToDeleteSelected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:onClick="getDateFromDBAndPrepareActivity"
+        android:text="@string/cast_tracks_chooser_dialog_ok"
+        app:layout_constraintBaseline_toBaselineOf="@+id/chooseDayToDelete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/chooseDayToDelete" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

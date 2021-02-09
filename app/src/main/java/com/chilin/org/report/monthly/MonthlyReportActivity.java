@@ -1,5 +1,6 @@
-package com.chilin.org.report;
+package com.chilin.org.report.monthly;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,25 +15,49 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.chilin.org.R;
-import com.chilin.org.db.TimeRegister;
-import com.chilin.org.util.DateTimeOperationsProvider;
-import com.chilin.org.util.DayTableOrder;
+import com.chilin.org.db.stempel.DBReader;
+import com.chilin.org.model.Day;
+import com.chilin.org.model.Month;
+import com.chilin.org.util.DateTimeOperator;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
-public class ReportCreatorActivity extends AppCompatActivity {
+public class MonthlyReportActivity extends AppCompatActivity {
 
     private static final String TAG = "report-activity";
+    private DBReader dbReader;
+    private List<Day> daysForReport;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_andresito);
+        initializeValues();
         addInfoToReport();
         setUpButtonInToolbar();
+        setTimeInMonth();
+    }
+
+    private void initializeValues() {
+        Intent intentFromChooseMonth = getIntent();
+        String monthForQuery = intentFromChooseMonth.getStringExtra(ChooseMonthActivity.MONTH_SELECTED);
+        String selectedYear = intentFromChooseMonth.getStringExtra(ChooseMonthActivity.YEAR_SELECTED);
+        daysForReport = getDbReader().getWorkedDaysOfMonth(monthForQuery, selectedYear);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void addInfoToReport() {
+        TableLayout report = findViewById(R.id.reportTable);
+        report.addView(createReportHeader());
+
+        for (Day dailyReport:daysForReport) {
+            TableRow dailyInformation = createRow(dailyReport);
+            report.addView(dailyInformation);
+        }
+        Log.i(TAG, "createReport executed successfully.");
     }
 
     private void setUpButtonInToolbar() {
@@ -43,17 +68,15 @@ public class ReportCreatorActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void addInfoToReport() {
-        TableLayout report = findViewById(R.id.reportTable);
-        report.addView(createReportHeader());
+    private void setTimeInMonth() {
+        Month month = DateTimeOperator.getWorkingTimeInMonth(daysForReport);
+        String workingTimeInMonthIst = month.getMonthlyWorkedTimeIST();
+        String workingTimeInMonthSoll = month.getMonthlyWorkedTimeSOLL();
 
-        TimeRegister timeRegister = new TimeRegister(this);
-        List<String[]> dailyResults = timeRegister.getAllDataInDB();
-        for (String[] dailyReport:dailyResults) {
-            TableRow dailyInformation = createRow(dailyReport);
-            report.addView(dailyInformation);
-        }
-        Log.i(TAG, "createReport executed successfully.");
+        TextView timeInMonth = findViewById(R.id.timeImMonthCalculated);
+        TextView timeInMonthSOLL = findViewById(R.id.zeitSoll);
+        timeInMonth.setText(workingTimeInMonthIst);
+        timeInMonthSOLL.setText(workingTimeInMonthSoll);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -93,16 +116,15 @@ public class ReportCreatorActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private TableRow createRow(String[] dailyReport) {
-        TextView workingDay = createTextCell(dailyReport[DayTableOrder.CURRENT_DAY_POSITION]);
-        TextView comingTime = createTextCell(dailyReport[DayTableOrder.COMMING_POSITION]);
-        TextView pauseBeginnTime = createTextCell(dailyReport[DayTableOrder.BEGINN_PAUSE_POSITION]);
-        TextView pauseEndeTime = createTextCell(dailyReport[DayTableOrder.ENDE_PAUSE_POSITION]);
-        TextView leavingTime = createTextCell(dailyReport[DayTableOrder.LEAVING_POSITION]);
-        TextView pauseView = createTextCell(DateTimeOperationsProvider.createPause(
-                dailyReport[DayTableOrder.CURRENT_DAY_POSITION],
-                dailyReport[DayTableOrder.BEGINN_PAUSE_POSITION],
-                dailyReport[DayTableOrder.ENDE_PAUSE_POSITION]));
+    private TableRow createRow(Day dailyReport) {
+        TextView workingDay = createTextCell(dailyReport.getDayRegistered());
+        TextView comingTime = createTextCell(dailyReport.getComingTime());
+        TextView pauseBeginnTime = createTextCell(dailyReport.getBeginnPause());
+        TextView pauseEndeTime = createTextCell(dailyReport.getEndePause());
+        TextView leavingTime = createTextCell(dailyReport.getLeavingTime());
+        TextView pauseView = createTextCell(DateTimeOperator
+                .createPause(dailyReport.getDayRegistered(), dailyReport.getBeginnPause()
+                        ,dailyReport.getEndePause()));
 
         TextView separatorText1 = createTextCell("||");
         TextView separatorText2 = createTextCell("||");
@@ -140,5 +162,12 @@ public class ReportCreatorActivity extends AppCompatActivity {
         textCell.setGravity(Gravity.CENTER);
         Log.i(TAG, "createTextCell executed successfully.");
         return textCell;
+    }
+
+    private DBReader getDbReader(){
+        if (this.dbReader == null){
+            this.dbReader = new DBReader(this);
+        }
+        return this.dbReader;
     }
 }

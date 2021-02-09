@@ -16,11 +16,6 @@ public class TextProcessorTest {
     }
 
     @Test
-    public void testListToString(){
-        String result = TextProcessor.convertList();
-    }
-
-    @Test
     public void getTime_MinutesAndHoursWithNoLeadingZeros_HourWithLeadingZerosForHoursAndMinutes(){
         int hours = 9;
         int minutes = 9;
@@ -55,6 +50,15 @@ public class TextProcessorTest {
         int input = 0;
         String twoDigitsNumber = TextProcessor.getTwoDigitsNumber(input);
         MatcherAssert.assertThat(twoDigitsNumber,CoreMatchers.is("00"));
+    }
+
+    @Test
+    public void getChosenDate_GivenInputFromDatePicker_StringIsFormatted(){
+        int dayFromPicker = 2;
+        int monthFromPicker = 9;
+        int yearFromPicker = 2020;
+        String result = TextProcessor.formatChosenDate(dayFromPicker,monthFromPicker,yearFromPicker);
+        MatcherAssert.assertThat(result,CoreMatchers.is("02-09-2020"));
     }
 
 }
